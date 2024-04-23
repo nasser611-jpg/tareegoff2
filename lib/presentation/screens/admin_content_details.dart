@@ -1,6 +1,4 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:tareegoff22/core/styles.dart';
 import 'package:tareegoff22/presentation/screens/google_map_screen.dart';
 
@@ -19,7 +17,7 @@ class AdminContentDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromARGB(255, 169, 169, 168),
+      color: const Color.fromARGB(255, 169, 169, 168),
       child: Column(
         children: [
           SingleChildScrollView(
@@ -39,9 +37,9 @@ class AdminContentDetails extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             alignment: Alignment.centerRight,
-            margin: EdgeInsets.only(right: 15, left: 10, top: 30),
+            margin: const EdgeInsets.only(right: 15, left: 10, top: 30),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(7)),
             child: Column(children: [
               Text(
@@ -56,7 +54,7 @@ class AdminContentDetails extends StatelessWidget {
               Text(
                 date,
                 style: Styles.textStyle12.copyWith(
-                    fontSize: 10, color: Color.fromARGB(255, 47, 46, 46)),
+                    fontSize: 10, color: const Color.fromARGB(255, 47, 46, 46)),
               )
             ]),
           ),
@@ -64,14 +62,14 @@ class AdminContentDetails extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.100,
           ),
           Container(
-            padding: EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.only(right: 8),
             alignment: Alignment.center,
             height: 50,
             width: 160,
             decoration: BoxDecoration(
-                color: Color.fromARGB(255, 110, 108, 108),
+                color: const Color.fromARGB(255, 110, 108, 108),
                 borderRadius: BorderRadius.circular(12)),
-            margin: EdgeInsets.only(right: 15),
+            margin: const EdgeInsets.only(right: 15),
             child: GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -99,15 +97,15 @@ class AdminContentDetails extends StatelessWidget {
                               },
                             ));
                       },
-                      icon: Icon(Icons.location_on_outlined),
+                      icon: const Icon(Icons.location_on_outlined),
                       iconSize: 25,
-                      color: Color.fromARGB(255, 228, 232, 230),
+                      color: const Color.fromARGB(255, 228, 232, 230),
                     ),
                     Text(
-                      ' انقر لرؤية الموقع',
+                      ' انقر لرؤية الموقــع',
                       style: Styles.textStyle12.copyWith(
                           fontSize: 11,
-                          color: Color.fromARGB(223, 241, 238, 238)),
+                          color: const Color.fromARGB(223, 241, 238, 238)),
                     ),
                   ]),
             ),

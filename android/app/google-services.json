@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "584108663058",
+    "project_id": "tareeqoff",
+    "storage_bucket": "tareeqoff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584108663058:android:3cbc820261092fed57d3cb",
+        "android_client_info": {
+          "package_name": "com.example.tareegoff22"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584108663058-7jb0gc9srn7lq76b65gr1pmm21oanb84.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tareegoff22",
+            "certificate_hash": "e2b62dd79aeae7746f56a41ccb127a021cf44c9e"
+          }
+        },
+        {
+          "client_id": "584108663058-amjpnljt015br84d5211pehrq8rlk29o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAD-OlRc47SFXmIpKvrbROSfpBY0g4aFH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584108663058-amjpnljt015br84d5211pehrq8rlk29o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

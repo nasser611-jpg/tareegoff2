@@ -1,8 +1,10 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:tareegoff22/core/styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tareegoff22/presentation/screens/sign_up.dart';
+import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
 
 class LoginSocialNetworkWidget extends StatefulWidget {
   const LoginSocialNetworkWidget({Key? key}) : super(key: key);
@@ -13,36 +15,89 @@ class LoginSocialNetworkWidget extends StatefulWidget {
 }
 
 class _LoginSocialNetworkWidgetState extends State<LoginSocialNetworkWidget> {
+    Future signInWithGoogle() async {
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+if(googleUser==null){
+  return ;
+}
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  // Once signed in, return the UserCredential
+   await FirebaseAuth.instance.signInWithCredential(credential);
+   Navigator.push(context, MaterialPageRoute(builder: (context) => UserComplainesScreen(),));
+}
+   
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _emailError;
   String? _passwordError;
+  bool isLoading=false;
 
-  void _validateAndSubmit() {
-    String? newEmailError;
-    String? newPasswordError;
-    if (_emailController.text.isEmpty ||
-        !RegExp(
-          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-        ).hasMatch(_emailController.text)) {
-      newEmailError = 'Please enter a valid email';
-    }
-    if (_passwordController.text.isEmpty ||
-        _passwordController.text.length < 8) {
-      newPasswordError = 'Password must be at least 8 characters';
-    }
 
-    if (newEmailError == null && newPasswordError == null) {
-      // Here, you would usually handle form submission
-      print('data submiitted succefully');
-    } else {
-      // Displaying error messages
-      setState(() {
-        _emailError = newEmailError;
-        _passwordError = newPasswordError;
-      });
-    }
+void _validateAndSubmit() async {
+  String? newEmailError;
+  String? newPasswordError;
+
+  if (_emailController.text.isEmpty ||
+      !RegExp(
+        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+      ).hasMatch(_emailController.text)) {
+    newEmailError = 'Please enter a valid email';
   }
+
+  if (_passwordController.text.isEmpty || _passwordController.text.length < 8) {
+    newPasswordError = 'Password must be at least 8 characters';
+  }
+
+  if (newEmailError == null && newPasswordError == null) {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text
+      );
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (credential.user!.emailVerified) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => UserComplainesScreen()));
+      } else {
+        print('===================================Verify email please');
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+
+      if (e.code == 'user-not-found') {
+        print('user not found');
+      } else if (e.code == 'wrong-password') {
+        print('password not correct');
+      }
+    }
+  } else {
+    // Display errors if any
+    setState(() {
+      _emailError = newEmailError;
+      _passwordError = newPasswordError;
+    });
+  }
+}
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +126,14 @@ class _LoginSocialNetworkWidgetState extends State<LoginSocialNetworkWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(width: 22),
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundColor: const Color(0xffD8D8D8),
-                      child: SvgPicture.asset('assets/images/google.svg',
-                          width: 25, height: 30),
+                    GestureDetector(
+                      onTap: signInWithGoogle,
+                      child: CircleAvatar(
+                        radius: 40,
+                        backgroundColor: const Color(0xffD8D8D8),
+                        child: SvgPicture.asset('assets/images/google.svg',
+                            width: 25, height: 30),
+                      ),
                     ),
                     const SizedBox(width: 22),
                     CircleAvatar(

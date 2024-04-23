@@ -34,15 +34,15 @@ class _UserComplainesScreenState extends State<UserComplainesScreen> {
             itemCount: comp.length,
             itemBuilder: (context, index) {
               return Container(
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                 height: MediaQuery.of(context).size.height * 0.099,
                 width: MediaQuery.of(context).size.width * 0.850,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(7),
                     border: Border.all(
                         color:
-                            Color.fromARGB(255, 216, 115, 115).withOpacity(0.2),
+                            const Color.fromARGB(255, 216, 115, 115).withOpacity(0.2),
                         width: 2)),
                 child: Row(
                   children: [
@@ -60,7 +60,7 @@ class _UserComplainesScreenState extends State<UserComplainesScreen> {
                                 },
                               ));
                             },
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Icon(
@@ -78,31 +78,31 @@ class _UserComplainesScreenState extends State<UserComplainesScreen> {
                             ),
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Container(
                           height: 22,
                           width: 88,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
                               color: comp[index] == 'مقبول'
-                                  ? Color.fromARGB(255, 81, 237, 161)
+                                  ? const Color.fromARGB(255, 81, 237, 161)
                                   : comp[index] == 'مرفوض'
-                                      ? Color.fromARGB(255, 239, 105, 105)
-                                      : Color.fromARGB(255, 234, 190, 115)),
+                                      ? const Color.fromARGB(255, 239, 105, 105)
+                                      : const Color.fromARGB(255, 234, 190, 115)),
                           child: Text(
                             comp[index],
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color.fromARGB(212, 83, 69, 47)),
                           ),
                         )
                       ],
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Row(
+                        const Row(
                           children: [
                             Text(
                               '2342424',
@@ -114,10 +114,10 @@ class _UserComplainesScreenState extends State<UserComplainesScreen> {
                             )
                           ],
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           formattedDateTime,
-                          style: TextStyle(fontSize: 11),
+                          style: const TextStyle(fontSize: 11),
                         )
                       ],
                     )

@@ -1,14 +1,12 @@
 import 'dart:io';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:tareegoff22/core/utils.dart';
 import 'package:tareegoff22/core/styles.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
+
 
 class UserSendComplainesScreen extends StatefulWidget {
   const UserSendComplainesScreen({Key? key}) : super(key: key);
@@ -28,8 +26,8 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
 
   late GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(14.539883828765259, 49.12690674701149);
-  LatLng _lastMapPosition = const LatLng(14.539883828765259, 49.12690674701149);
+  final LatLng _center = const LatLng(14.539676799430207, 49.12746489158958);
+  LatLng _lastMapPosition = const LatLng(14.539676799430207, 49.12746489158958);
   String _address = "";
 
   void _onMapCreated(GoogleMapController controller) {
@@ -276,7 +274,8 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      width: 330,
+                      width:
+                          MediaQuery.of(context).size.width, // Use full width
                       height: 400,
                       child: GoogleMap(
                         onMapCreated: _onMapCreated,

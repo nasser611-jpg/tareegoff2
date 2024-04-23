@@ -15,16 +15,16 @@ class GoogleMapsScreen extends StatefulWidget {
 class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
   late GoogleMapController mapController;
 
-  Set<Marker> _markers = {};
+  final Set<Marker> _markers = {};
 
   @override
   void initState() {
     super.initState();
     _markers.add(
       Marker(
-        markerId: MarkerId('myMarker'),
+        markerId: const MarkerId('myMarker'),
         position: LatLng(widget.lan, widget.long),
-        infoWindow: InfoWindow(
+        infoWindow: const InfoWindow(
           title: 'الموقع العطل', // Specify the title here
         ),
       ),
