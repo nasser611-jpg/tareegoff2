@@ -4,6 +4,7 @@ import 'package:tareegoff22/core/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tareegoff22/presentation/screens/sign_up.dart';
+import 'package:tareegoff22/presentation/screens/admin_complaines.dart';
 import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
 
 class LoginSocialNetworkWidget extends StatefulWidget {
@@ -22,7 +23,7 @@ if(googleUser==null){
   return ;
 }
   // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+  final GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
 
   // Create a new credential
   final credential = GoogleAuthProvider.credential(
@@ -62,7 +63,10 @@ void _validateAndSubmit() async {
       setState(() {
         isLoading = true;
       });
+   if(_emailController.text=='admin@gmail.com'&&_passwordController.text=='admin123'){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AdminComplainesScreen()));
 
+   }
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text
@@ -73,7 +77,7 @@ void _validateAndSubmit() async {
       });
 
       if (credential.user!.emailVerified) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => UserComplainesScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserComplainesScreen()));
       } else {
         print('===================================Verify email please');
       }
@@ -96,9 +100,6 @@ void _validateAndSubmit() async {
     });
   }
 }
-
-  
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tareegoff22/core/styles.dart';
 
 // ignore: non_constant_identifier_names
-AppBar CustomAppBar(String title, IconData myIcon) {
-  return AppBar(
+AppBar CustomAppBar(String title, IconData myIcon,{String ?type}) {
+  return AppBar(  iconTheme: IconThemeData(color: Colors.white),  // Set the AppBar icons to white
+
     flexibleSpace: Container(
+      
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
@@ -17,7 +19,7 @@ AppBar CustomAppBar(String title, IconData myIcon) {
                 Color.fromARGB(255, 17, 87, 144)
               ])),
       padding: const EdgeInsets.only(
-        top: 30,
+        top: 40,
         left: 15,
         right: 15,
       ),
@@ -25,7 +27,7 @@ AppBar CustomAppBar(String title, IconData myIcon) {
       height: 90,
       child: Row(
         children: [
-          const CustomLogo(),
+         type=='no'?Text('') : const CustomLogo(),
           const Spacer(),
           Text(
             title,

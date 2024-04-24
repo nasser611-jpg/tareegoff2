@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tareegoff22/core/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:tareegoff22/presentation/screens/login.dart';
-import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
 
 class SignSocialNetworksWidget extends StatefulWidget {
   const SignSocialNetworksWidget({Key? key}) : super(key: key);
@@ -17,61 +17,72 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
   final TextEditingController _passwordController = TextEditingController();
   String? _emailError;
   String? _passwordError;
+ 
+  void _submitForm() async{
+  
+      try {
+  final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    email: _emailController.text,
+    password: _passwordController.text,
+  );
+ FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      Navigator.push(context, MaterialPageRoute(builder:(context) => LoginScreen(),));
+ AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.success,
+                      animType: AnimType.rightSlide,
+                      headerAnimationLoop: true,
+                      title: 'عفواً',
+                      desc:
+                          '   اذهب الى الايميل وقم بالضغط على لينك التحقق لتفعيل حسابك ثم سجل الدخول به',btnOkOnPress: () {
+                            Navigator.pop(context);
+                          },
+                          btnOkText: 'حسناً'
+                   
+                    ).show();
 
-void _validateAndSubmit() async {
-  String? newEmailError;
-  String? newPasswordError;
- bool isLoading = true;
-  if (_emailController.text.isEmpty ||
-      !RegExp(
-        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-      ).hasMatch(_emailController.text)) {
-    newEmailError = 'Please enter a valid email';
+} on FirebaseAuthException catch (e) {
+  if (e.code == 'weak-password') {
+     AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.rightSlide,
+                      headerAnimationLoop: true,
+                      title: 'عذراً',
+                      desc:
+                          'كلمة المرور ضعيفه جدا',
+                   
+                    ).show();
+  } else if (e.code == 'email-already-in-use') {
+          AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.rightSlide,
+                      headerAnimationLoop: true,
+                      title: 'عذراً',
+                      desc:
+                          'هذا الحساب مستخدم بالفعل ',
+                   
+                    ).show();
+    print('The account already exists for that email.');
+  }else {
+    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.rightSlide,
+                      headerAnimationLoop: true,
+                      title: 'عذراً',
+                      desc:
+                          '${e.code}',
+                   
+                    ).show();
   }
-
-  if (_passwordController.text.isEmpty || _passwordController.text.length < 8) {
-    newPasswordError = 'Password must be at least 8 characters';
-  }
-
-  if (newEmailError == null && newPasswordError == null) {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text
-      );
-
-      setState(() {
-        isLoading = false;
-      });
-
-      if (credential.user!.emailVerified) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => UserComplainesScreen()));
-      } else {
-        print('===================================Verify email please');
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-
-      if (e.code == 'user-not-found') {
-        print('user not found');
-      } else if (e.code == 'wrong-password') {
-        print('password not correct');
-      }
-    }
-  } else {
-    // Display errors if any
-    setState(() {
-      _emailError = newEmailError;
-      _passwordError = newPasswordError;
-    });
-  }
-}
+} catch (e) {
+  print(e);
+}}
+      // Here you can handle the SignUp logic with the state values
+      
+  
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +144,7 @@ void _validateAndSubmit() async {
                   child: Material(
                     color: Colors.transparent,
                     child: TextField(
-                      controller: _emailController,
+                      controller:_emailController ,
                       decoration: InputDecoration(
                         hintText: 'Enter Email',
                         errorText: _emailError,
@@ -182,7 +193,7 @@ void _validateAndSubmit() async {
                           style: Styles.textStyle30Title
                               .copyWith(color: Colors.white),
                         ),
-                        onPressed: _validateAndSubmit),
+                        onPressed: _submitForm),
                   ),
                 ),
                 Row(

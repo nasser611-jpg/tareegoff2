@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tareegoff22/core/styles.dart';
@@ -83,7 +82,7 @@ class SocialNetworkWidget extends StatelessWidget {
                         Styles.textStyle30Title.copyWith(color: Colors.white),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(
+                    Navigator.pushReplacement(context, MaterialPageRoute(
                       builder: (context) {
                         return SignUpScreen();
                       },

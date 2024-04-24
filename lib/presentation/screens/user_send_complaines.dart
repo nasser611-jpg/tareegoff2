@@ -1,15 +1,36 @@
 import 'dart:io';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:tareegoff22/core/utils.dart';
-import 'package:tareegoff22/core/styles.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:path/path.dart' as path;
+import 'package:tareegoff22/core/styles.dart';
+import 'package:tareegoff22/core/utils.dart';
+import 'package:tareegoff22/presentation/screens/test_google_map.dart';
 import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 class UserSendComplainesScreen extends StatefulWidget {
-  const UserSendComplainesScreen({Key? key}) : super(key: key);
+  const UserSendComplainesScreen({Key? key, this.selectedLongitude,  this.selectedAddress,  this.selectedLatitude}) : super(key: key);
+ final double ?selectedLatitude;
+ final double ?selectedLongitude;
+final  String? selectedAddress;
 
   @override
   State<UserSendComplainesScreen> createState() =>
@@ -17,39 +38,14 @@ class UserSendComplainesScreen extends StatefulWidget {
 }
 
 class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
-  TextEditingController _controller = TextEditingController();
+  TextEditingController _desController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String? _errorText;
   bool _submitButtonPressed = false;
   final ImagePicker _picker = ImagePicker();
   XFile? _imageFile;
-
-  late GoogleMapController mapController;
-
-  final LatLng _center = const LatLng(14.539676799430207, 49.12746489158958);
-  LatLng _lastMapPosition = const LatLng(14.539676799430207, 49.12746489158958);
-  String _address = "";
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  void _onCameraMove(CameraPosition position) {
-    _lastMapPosition = position.target;
-  }
-
-  Future<void> _onMapTapped(LatLng location) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(location.latitude, location.longitude);
-    if (placemarks.isNotEmpty) {
-      setState(() {
-        _lastMapPosition = location;
-        _address =
-            "${placemarks.first.name}, ${placemarks.first.locality}, ${placemarks.first.country}";
-      });
-    }
-  }
-
+   File? file;
+  String ?url;
   void _showPickOptionsDialog() {
     showModalBottomSheet(
       context: context,
@@ -88,6 +84,18 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
     );
 
     if (image != null) {
+        
+     
+   file=File(image.path);
+   var imageName=path.basename(image.path);
+   var refStoreage=FirebaseStorage.instance.ref('images/$imageName');
+   await refStoreage.putFile(file!);
+ url=await refStoreage.getDownloadURL();
+;
+      setState(() {
+        _imageFile = image;
+      });
+    
       setState(() {
         _imageFile = image;
       });
@@ -102,6 +110,18 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
     );
 
     if (image != null) {
+     
+   file=File(image.path);
+   var imageName=path.basename(image.path);
+   var refStoreage=FirebaseStorage.instance.ref('images/$imageName');
+   await refStoreage.putFile(file!);
+ url=await refStoreage.getDownloadURL();
+
+
+
+setState(() {
+  
+});
       setState(() {
         _imageFile = image;
       });
@@ -112,8 +132,8 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
   void initState() {
     super.initState();
     // Set initial text value and position cursor at the end
-    _controller.selection = TextSelection.fromPosition(
-      TextPosition(offset: _controller.text.length),
+    _desController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _desController.text.length),
     );
   }
 
@@ -121,7 +141,8 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar('اضافة شكوى', Icons.add),
-      body: SingleChildScrollView(
+      body: 
+      SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -151,7 +172,7 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                       child: TextFormField(
                         maxLines: 4,
                         maxLength: 120,
-                        controller: _controller,
+                        controller: _desController,
                         textAlign: TextAlign.start,
                         textDirection: TextDirection.rtl,
                         decoration: InputDecoration(
@@ -253,6 +274,9 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                               height: MediaQuery.of(context).size.height *
                                   0.5, // For example, half the screen height
                               decoration: BoxDecoration(
+                                boxShadow: [
+                                 BoxShadow(color:url!=null? Colors.green:Colors.redAccent)
+                                ],
                                 borderRadius: BorderRadius.circular(12),
                                 image: DecorationImage(
                                   image: FileImage(File(_imageFile!.path)),
@@ -265,45 +289,38 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                       height: MediaQuery.of(context).size.height * 0.020,
                     ),
                     Text(
-                      '  حدد الموقع',
+                      '   الموقـــع',
                       style: Styles.textStyle12,
                       textAlign: TextAlign.start,
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      width:
-                          MediaQuery.of(context).size.width, // Use full width
-                      height: 400,
-                      child: GoogleMap(
-                        onMapCreated: _onMapCreated,
-                        initialCameraPosition: CameraPosition(
-                          target: _center,
-                          zoom: 11.0,
-                        ),
-                        onCameraMove: _onCameraMove,
-                        onTap: _onMapTapped,
-                      ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.020,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            ' $_address',
-                            textDirection: TextDirection.rtl,
-                            style: Styles.textStyle12,
-                          ),
-                          Text(
-                            'الموقع المحدد: ',
-                            textDirection: TextDirection.rtl,
-                          ),
-                        ],
-                      ),
-                    ),
+                 Center(
+                   child: Container(
+                    padding: EdgeInsets.all(6),
+                    alignment: Alignment.center,
+                               height: widget.selectedAddress==null?40:70,
+                               width:widget.selectedAddress==null?  150:320,
+                               decoration: BoxDecoration(
+                                 color: Color.fromARGB(255, 193, 197, 206).withOpacity(0.5),
+                                 borderRadius: BorderRadius.circular(12)),
+                               child: Center(
+                                 child: InkWell(onTap: () {
+                                 Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                   return MapScreen();
+                                 },));
+                                 },
+                                   child: Text(widget.selectedAddress==null? 
+                    'اختيار الموقع':widget.selectedAddress.toString(),
+                    style: Styles.titlePage
+                        .copyWith(color: Colors.black,fontSize: 15),
+                                   ),
+                                 ),
+                               ),
+                             ),
+                 ),
+                 
                   ],
                 ),
               ),
@@ -314,21 +331,46 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async{
             setState(() {
               _submitButtonPressed = true;
             });
-            if (_controller.text.isEmpty) {
+              
+            if (_desController.text.isEmpty) {
               setState(() {
                 _errorText = 'الرجاء إدخال الوصف';
               });
-            } else if (_formKey.currentState!.validate()) {
-              print('nice,sucefully submitted');
-            } else {
-              // Form is not valid, set the error text
-              setState(() {
-                _errorText = 'الرجاء تصحيح الأخطاء أعلاه';
-              });
+            }else if(widget.selectedAddress==null){
+                 AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.question,
+                      animType: AnimType.rightSlide,
+                      headerAnimationLoop: true,
+                      title: 'عفواً',
+                      desc:
+                          'الرجاء اختيار الموقع !...'   ,btnOkOnPress: () {
+                         
+                          },
+                          btnOkText: 'حسناً'
+                   
+                    ).show();
+                } else if (_formKey.currentState!.validate()) {
+  try{
+        CollectionReference collNote= FirebaseFirestore.instance.collection('categories').doc(FirebaseAuth.instance.currentUser!.uid).collection('note');
+
+DocumentReference response=await  collNote.add({
+ 'des':_desController.text,
+   'url':url??"none",
+   'address':widget.selectedAddress,
+   'lat':widget.selectedLatitude,
+   'long':widget.selectedLongitude,
+   'time':formattedDateTime
+});
+
+}catch(e){
+  print('Erorr $e');
+}
+  
             }
           },
           child: Container(
@@ -336,10 +378,14 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
             width: 308,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
             child: Center(
-              child: Text(
-                'ارسال',
-                style: Styles.textStyle30Title
-                    .copyWith(color: Color.fromARGB(255, 38, 146, 204)),
+              child: InkWell(onTap: () {
+              
+              },
+                child: Text(
+                  'ارسال',
+                  style: Styles.textStyle30Title
+                      .copyWith(color: Color.fromARGB(255, 38, 146, 204)),
+                ),
               ),
             ),
           ),
