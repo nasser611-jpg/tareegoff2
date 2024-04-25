@@ -4,7 +4,6 @@ import 'package:tareegoff22/core/styles.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
-import 'package:tareegoff22/presentation/screens/user_send_complaines.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -13,9 +12,9 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   GoogleMapController? mapController;
-  double ?selectedLatitude;
+  double? selectedLatitude;
   double? selectedLongitude;
-  String ?selectedAddress;
+  String? selectedAddress;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -50,7 +49,8 @@ class _MapScreenState extends State<MapScreen> {
               onMapCreated: _onMapCreated,
               onTap: _onMapTap,
               initialCameraPosition: CameraPosition(
-                target: LatLng(14.540715320428557, 49.127207399530086), // Default initial location (San Francisco)
+                target: LatLng(14.540715320428557,
+                    49.127207399530086), // Default initial location (San Francisco)
                 zoom: 12.0,
               ),
               markers: selectedLatitude == null || selectedLongitude == null
@@ -71,48 +71,44 @@ class _MapScreenState extends State<MapScreen> {
               style: TextStyle(fontSize: 16.0),
             ),
           ),
-          Container(
-            height: 50,
-            width: 100,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 211, 209, 209),
-              borderRadius: BorderRadius.circular(12)),
-            child: Center(
-              child: InkWell(onTap: () {
-
-                if(selectedAddress==null){
-                 AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.question,
-                      animType: AnimType.rightSlide,
-                      headerAnimationLoop: true,
-                      title: 'عفواً',
-                      desc:
-                          'الرجاء اختيار الموقع !...'   ,btnOkOnPress: () {
-                         
-                          },
-                          btnOkText: 'حسناً'
-                   
-                    ).show();
-                    
-                }else{
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                    return UserSendComplainesScreen(selectedAddress: selectedAddress,
-                    selectedLatitude: selectedLatitude,selectedLongitude: selectedLongitude,);
-                  },));
-                }
-              },
+          GestureDetector(
+            onTap: () {
+               if (selectedAddress == null) {
+                    AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.question,
+                            animType: AnimType.rightSlide,
+                            headerAnimationLoop: true,
+                            title: 'عفواً',
+                            desc: 'الرجاء اختيار الموقع !...',
+                            btnOkOnPress: () {},
+                            btnOkText: 'حسناً')
+                        .show();
+                  } else {
+                    Map<String, dynamic> mapData = {
+                      'selectedLatitude': selectedLatitude,
+                      'selectedLongitude': selectedLongitude,
+                      'selectedAddress': selectedAddress
+                    };
+                    Navigator.pop(context, mapData);
+                  }
+            },
+            child: Container(
+              height: 50,
+              width: 100,
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 211, 209, 209),
+                  borderRadius: BorderRadius.circular(12)),
+              child: Center(
                 child: Text(
                   'حفظ',
-                  style: Styles.textStyle30Title
-                      .copyWith(color: Colors.black),
+                  style: Styles.textStyle30Title.copyWith(color: Colors.black),
                 ),
               ),
             ),
           ),
         ],
       ),
-    
     );
   }
 }

@@ -1,16 +1,16 @@
 import 'dart:io';
-
+import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
+import 'package:tareegoff22/core/utils.dart';
+import 'package:tareegoff22/core/styles.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
-import 'package:tareegoff22/core/styles.dart';
-import 'package:tareegoff22/core/utils.dart';
-import 'package:tareegoff22/presentation/screens/test_google_map.dart';
 import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
+import 'package:tareegoff22/presentation/screens/set_user_location.dart';
+import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
 
 
 
@@ -27,10 +27,8 @@ import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
 
 
 class UserSendComplainesScreen extends StatefulWidget {
-  const UserSendComplainesScreen({Key? key, this.selectedLongitude,  this.selectedAddress,  this.selectedLatitude}) : super(key: key);
- final double ?selectedLatitude;
- final double ?selectedLongitude;
-final  String? selectedAddress;
+  const UserSendComplainesScreen({Key? key,}) : super(key: key);
+
 
   @override
   State<UserSendComplainesScreen> createState() =>
@@ -46,6 +44,9 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
   XFile? _imageFile;
    File? file;
   String ?url;
+ late  double ?selectedLatitude;
+ double ?selectedLongitude;
+   String? selectedAddress;
   void _showPickOptionsDialog() {
     showModalBottomSheet(
       context: context,
@@ -127,7 +128,12 @@ setState(() {
       });
     }
   }
-
+@override
+  void dispose() {
+    _desController.dispose();
+    
+    super.dispose();
+  }
   @override
   void initState() {
     super.initState();
@@ -300,19 +306,29 @@ setState(() {
                    child: Container(
                     padding: EdgeInsets.all(6),
                     alignment: Alignment.center,
-                               height: widget.selectedAddress==null?40:70,
-                               width:widget.selectedAddress==null?  150:320,
+                               height: selectedAddress==null?40:70,
+                               width:selectedAddress==null?  150:320,
                                decoration: BoxDecoration(
                                  color: Color.fromARGB(255, 193, 197, 206).withOpacity(0.5),
                                  borderRadius: BorderRadius.circular(12)),
                                child: Center(
-                                 child: InkWell(onTap: () {
-                                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                   return MapScreen();
-                                 },));
+                                 child: InkWell(onTap: () async{
+                                
+                            final mapData= await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MapScreen()),
+              
+            );if(mapData!=null){
+             selectedAddress=mapData['selectedAddress'];
+               selectedLatitude=mapData['selectedLatitude'];
+             selectedLongitude=mapData['selectedLongitude'];
+               setState(() {
+                 
+               });
+            }
                                  },
-                                   child: Text(widget.selectedAddress==null? 
-                    'اختيار الموقع':widget.selectedAddress.toString(),
+                                   child: Text(selectedAddress==null? 
+                    'اختيار الموقع':selectedAddress.toString(),
                     style: Styles.titlePage
                         .copyWith(color: Colors.black,fontSize: 15),
                                    ),
@@ -320,6 +336,7 @@ setState(() {
                                ),
                              ),
                  ),
+              
                  
                   ],
                 ),
@@ -340,7 +357,7 @@ setState(() {
               setState(() {
                 _errorText = 'الرجاء إدخال الوصف';
               });
-            }else if(widget.selectedAddress==null){
+            }else if(selectedAddress==null){
                  AwesomeDialog(
                       context: context,
                       dialogType: DialogType.question,
@@ -361,13 +378,41 @@ setState(() {
 DocumentReference response=await  collNote.add({
  'des':_desController.text,
    'url':url??"none",
-   'address':widget.selectedAddress,
-   'lat':widget.selectedLatitude,
-   'long':widget.selectedLongitude,
-   'time':formattedDateTime
+   'address':selectedAddress,
+   'lat':selectedLatitude,
+   'long':selectedLongitude,
+   'time':formattedDateTime,
+   'state':'قيد المراجعه'
 });
+ AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.success,
+                      animType: AnimType.bottomSlide,
+                      headerAnimationLoop: true,
+                      title: 'جميل',
+                      desc:
+                          'تم الرفع بنجاح   !...'   ,btnOkOnPress: () {
+                         
+                          },
+                          btnOkText: 'حسناً'
+                   
+                    ).show();
+                          Navigator.push(context, MaterialPageRoute(builder:(context) => UserComplainesScreen(),));
 
 }catch(e){
+   AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.bottomSlide,
+                      headerAnimationLoop: true,
+                      title: 'عفواً',
+                      desc:
+                          'الرجاء تاكد من جودة الانترنت لديك  !...'   ,btnOkOnPress: () {
+                         
+                          },
+                          btnOkText: 'حسناً'
+                   
+                    ).show();
   print('Erorr $e');
 }
   

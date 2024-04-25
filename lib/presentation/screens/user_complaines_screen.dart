@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tareegoff22/core/utils.dart';
 import 'package:tareegoff22/core/styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tareegoff22/presentation/widgets/custom_drawer.dart';
 import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
 import 'package:tareegoff22/presentation/screens/google_map_screen.dart';
@@ -14,14 +16,24 @@ class UserComplainesScreen extends StatefulWidget {
 }
 
 class _UserComplainesScreenState extends State<UserComplainesScreen> {
-  List<String> comp = [
-    'تحت المراجعه',
-    'مقبول',
-    'مرفوض',
-    'تحت المراجعه',
-    'مقبول',
-    'مرفوض',
-  ];
+    List<QueryDocumentSnapshot> data=[];
+  bool isLoading=true;
+
+getData()async{
+  QuerySnapshot querySnapshot=
+ await FirebaseFirestore.instance
+    .collection('categories').doc( FirebaseAuth.instance.currentUser!.uid).collection('note').get();
+    data.addAll(querySnapshot.docs);
+    isLoading=false;
+setState(() {
+  
+});
+}
+  @override
+  void initState() {
+   getData();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,25 +41,39 @@ class _UserComplainesScreenState extends State<UserComplainesScreen> {
       floatingActionButton: FloatingActionButton(onPressed:() {
            Navigator.push(context, MaterialPageRoute(
                                 builder: (context) {
-                                  return UserSendComplainesScreen();
+                                  return const UserSendComplainesScreen();
                                 },
                               ));
-      },child: Icon(Icons.add_comment),),
+      },child: const Icon(Icons.add_comment),),
       appBar: CustomAppBar('طلباتي', Icons.account_circle,type: 'no'),
       body: Padding(
         padding: const EdgeInsets.only(top: 20),
-        child: ListView.builder(
-            itemCount: comp.length,
+        child:isLoading?const Center(child: CircularProgressIndicator()) : ListView.builder(
+            itemCount: data.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () {
-                     Navigator.push(context, MaterialPageRoute(
+                onTap: () {try{ Navigator.push(context, MaterialPageRoute(
                                 builder: (context) {
                                   return GoogleMapsScreen(
-                                      lan: 15.840799375481271,
-                                      long: 48.46553424859829);
+                                      lan: data[index]['lat'],
+                                      long: data[index]['long']);
                                 },
-                              ));
+                              ));}catch(e){
+                                AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.question,
+                      animType: AnimType.rightSlide,
+                      headerAnimationLoop: true,
+                      title: 'عذرا',
+                      desc:
+                          'الرجاء التاكد من جودة الانتنرنت  لديك !...'   ,btnOkOnPress: () {
+                         
+                          },
+                          btnOkText: 'حسناً'
+                   
+                    ).show();
+                              }
+                    
                 },
                 child: Container(
                   padding: const EdgeInsets.all(10),
@@ -62,13 +88,15 @@ class _UserComplainesScreenState extends State<UserComplainesScreen> {
                           width: 2)),
                   child: Row(
                     children: [
+                  
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            child: const Row(
+                          const SizedBox(
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                
                                 Icon(
                                   Icons.location_on,
                                   color: Color.fromARGB(255, 93, 141, 118),
@@ -89,13 +117,13 @@ class _UserComplainesScreenState extends State<UserComplainesScreen> {
                             width: 88,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6),
-                                color: comp[index] == 'مقبول'
+                                color: data[index]['state'] == 'مقبول'
                                     ? const Color.fromARGB(255, 81, 237, 161)
-                                    : comp[index] == 'مرفوض'
+                                    : data[index]['state']== 'مرفوض'
                                         ? const Color.fromARGB(255, 239, 105, 105)
                                         : const Color.fromARGB(255, 234, 190, 115)),
                             child: Text(
-                              comp[index],
+                             data[index]['state'],
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Color.fromARGB(212, 83, 69, 47)),
@@ -107,21 +135,24 @@ class _UserComplainesScreenState extends State<UserComplainesScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          const Row(
+                           Row(
                             children: [
-                              Text(
-                                '2342424',
-                                style: Styles.textStyle12,
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                child: Text(
+                                  '${FirebaseAuth.instance.currentUser!.displayName}',
+                                  style: Styles.textStyle12,
+                                ),
                               ),
                               Text(
-                                'رقم الطلب : ',
+                                'مقدم الطلب : ',
                                 textDirection: TextDirection.rtl,
                               )
                             ],
                           ),
                           const Spacer(),
                           Text(
-                            formattedDateTime,
+                            data[index]['time'],
                             style: const TextStyle(fontSize: 11),
                           )
                         ],

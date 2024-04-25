@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
-import 'package:tareegoff22/presentation/home.dart';
+import 'package:tareegoff22/presentation/screens/admin_complaines.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +47,7 @@ FirebaseAuth.instance
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: Home());
+            home: AdminComplainesScreen());
       },
     );
   }

@@ -17,7 +17,12 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
   final TextEditingController _passwordController = TextEditingController();
   String? _emailError;
   String? _passwordError;
- 
+ @override
+  void dispose() {
+   _emailController.dispose();
+   _passwordController.dispose();
+    super.dispose();
+  }
   void _submitForm() async{
   
       try {

@@ -2,6 +2,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:tareegoff22/core/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tareegoff22/presentation/screens/sign_up.dart';
 import 'package:tareegoff22/presentation/screens/admin_complaines.dart';
@@ -33,7 +34,7 @@ if(googleUser==null){
 
   // Once signed in, return the UserCredential
    await FirebaseAuth.instance.signInWithCredential(credential);
-   Navigator.push(context, MaterialPageRoute(builder: (context) => UserComplainesScreen(),));
+   Navigator.push(context, MaterialPageRoute(builder: (context) => const UserComplainesScreen(),));
 }
    
   final TextEditingController _emailController = TextEditingController();
@@ -42,7 +43,12 @@ if(googleUser==null){
   String? _passwordError;
   bool isLoading=false;
 
-
+@override
+  void dispose() {
+   _emailController.dispose();
+   _passwordController.dispose();
+    super.dispose();
+  }
 void _validateAndSubmit() async {
   String? newEmailError;
   String? newPasswordError;
@@ -64,7 +70,7 @@ void _validateAndSubmit() async {
         isLoading = true;
       });
    if(_emailController.text=='admin@gmail.com'&&_passwordController.text=='admin123'){
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AdminComplainesScreen()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AdminComplainesScreen()));
 
    }
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -73,11 +79,12 @@ void _validateAndSubmit() async {
       );
 
       setState(() {
+        
         isLoading = false;
       });
 
       if (credential.user!.emailVerified) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserComplainesScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const UserComplainesScreen()));
       } else {
         print('===================================Verify email please');
       }
@@ -189,19 +196,61 @@ void _validateAndSubmit() async {
                       decoration: InputDecoration(
                         hintText: 'Enter Password',
                         errorText: _passwordError,
-                        prefixIcon: Icon(Icons.lock,
+                        prefixIcon: const Icon(Icons.lock,
                             color: Color.fromARGB(255, 125, 123, 123)),
                         border: InputBorder.none,
                       ),
                     ),
                   ),
                 ),
+                                SizedBox(height: MediaQuery.of(context).size.height * 0.010),
+                                 GestureDetector(
+                                  onTap: () async{
+                                                try {
+  await   FirebaseAuth.instance.sendPasswordResetEmail(email: _emailController.text);
+             AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.success,
+                  animType: AnimType.topSlide,
+                  headerAnimationLoop: true,
+                  title: 'عفواً',
+                  desc:
+                      'لقد تم ارسال لينك على ايميلك انقر عليه لتغيير كلمة المرور الخاصه بك!...'   ,btnOkOnPress: () {
+                     
+                      },
+                      btnOkText: 'حسناً'
+               
+                ).show();
+} on Exception catch (e) {
+           AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.error,
+                  animType: AnimType.topSlide,
+                  headerAnimationLoop: true,
+                  title: 'عفواً',
+                  desc:
+                      '$e'   ,btnOkOnPress: () {
+                     
+                      },
+                      btnOkText: 'تمام'
+               
+                ).show();
+}
+                        
+                                                                  },
+                                   child: Padding(
+                                    padding: EdgeInsets.only(right: 28.0),
+                                    child: Align(alignment: Alignment.topRight,
+                                    child: Text( 'forget Password',style: Styles.textStyle12.copyWith(color:Color(0xff702FDB)),)),
+                                                                   ),
+                                 ),
+
                 SizedBox(height: MediaQuery.of(context).size.height * 0.035),
                 Container(
                   height: 59,
                   width: 308,
                   decoration: BoxDecoration(
-                      color: Color(0xff702FDB),
+                      color: const Color(0xff702FDB),
                       borderRadius: BorderRadius.circular(12)),
                   child: Center(
                     child: TextButton(
@@ -224,7 +273,7 @@ void _validateAndSubmit() async {
                         onPressed: () {
                           Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (context) {
-                              return SignUpScreen();
+                              return const SignUpScreen();
                             },
                           ));
                         },

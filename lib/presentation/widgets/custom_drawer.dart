@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:tareegoff22/core/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tareegoff22/core/styles.dart';
 import 'package:tareegoff22/presentation/screens/login.dart';
-import 'package:tareegoff22/presentation/widgets/custom_app_logo.dart';
 class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,15 +17,23 @@ class CustomDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color.fromARGB(255, 216, 223, 229),
             ),
-            child:CustomAppLogo()
+            child:Row(
+              children: [
+                Text(FirebaseAuth.instance.currentUser!.email.toString()),
+                SizedBox(width: 5,),
+                CircleAvatar(
+                  child:Image.asset('assets/images/logo 1.png',width: 50,height: 70,fit: BoxFit.fill,),
+                  )
+              ],
+            )
           ),
-          ListTile(trailing: Icon(Icons.logout),
+          ListTile(trailing: const Icon(Icons.logout),
             title: Text('تسجيل الخروج',style: Styles.titlePage.copyWith(color: Colors.black,fontSize: 14),),
             onTap: () async{
                 Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => LoginScreen(),
+        builder: (context) =>const LoginScreen(),
       ),
         );
         try {
