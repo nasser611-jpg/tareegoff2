@@ -4,9 +4,9 @@
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
-        android:label="tareegoff22"
+        android:label="Tareeq"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/logo">
             <meta-data android:name="com.google.android.geo.API_KEY"
                      android:value="AIzaSyA5kSc1flCea946CCVG7_p-v2AV3ebXq0Y"/>
 

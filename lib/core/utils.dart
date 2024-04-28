@@ -1,10 +1,10 @@
-import 'dart:io';
 import 'package:intl/intl.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 Future<void> launchURLMap(String query) async {
@@ -98,3 +98,18 @@ class MapSampleState extends State<MapSample> {
   }
 }
 
+      CollectionReference user= FirebaseFirestore.instance.collection('categories');
+
+  addCategory()async{
+try{
+DocumentReference response=await  user.add({
+   'email':FirebaseAuth.instance.currentUser!.email,
+  'id':FirebaseAuth.instance.currentUser!.uid,
+  'displayName':FirebaseAuth.instance.currentUser!.displayName
+});
+
+}catch(e){
+  print('Erorr $e');
+}}
+  
+String  imgUrl='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4tQgNhsEvF8Oh2oURhW15UQvorIoAEwXYdQ&s';

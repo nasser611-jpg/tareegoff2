@@ -4,14 +4,14 @@ import 'package:tareegoff22/presentation/widgets/admin_list_view_item.dart';
 import 'package:tareegoff22/presentation/widgets/admin_list_view_content.dart';
 
 class AdminComplainesScreen extends StatefulWidget {
-  const AdminComplainesScreen({Key? key}) : super(key: key);
-
+  const AdminComplainesScreen({Key? key,  this.catId}) : super(key: key);
+ final String? catId;
   @override
   State<AdminComplainesScreen> createState() => _AdminComplainesScreenState();
 }
 
 class _AdminComplainesScreenState extends State<AdminComplainesScreen> {
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +20,7 @@ class _AdminComplainesScreenState extends State<AdminComplainesScreen> {
       appBar: CustomAppBar(' الإبلاغات', Icons.supervised_user_circle_outlined),
       body: Column(
         children: [
-          CustomListViewItem(),
+          CustomListViewImage(catId: widget.catId,),
           Divider(
             height: 3,
             color: Colors.grey.withOpacity(0.1),
@@ -31,15 +31,7 @@ class _AdminComplainesScreenState extends State<AdminComplainesScreen> {
           ),
           Expanded(
             child: CustomListViewContent(
-              imgUrl: [
-                'assets/images/kh1.jpg',
-                'assets/images/kh2.jpg',
-                'assets/images/kh5.jpg',
-                'assets/images/kh1.jpg',
-                'assets/images/kh2.jpg',
-                'assets/images/kh5.jpg',
-              ],
-              places: ['القطن', 'سيئون', 'تريم', 'القطن', 'سيئون', 'تريم'],
+              catId:widget.catId ,
             ),
           )
         ],

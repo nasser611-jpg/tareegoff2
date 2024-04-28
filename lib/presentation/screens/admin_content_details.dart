@@ -22,11 +22,13 @@ class AdminContentDetails extends StatelessWidget {
         children: [
           SingleChildScrollView(
             child: Container(
+              
               margin: const EdgeInsets.only(
                   top: 70, left: 15, right: 15, bottom: 20),
-              height: MediaQuery.of(context).size.height * 0.320,
+              height: MediaQuery.of(context).size.height * 0.450,
+              width:MediaQuery.of(context).size.height * 0.320 ,
               decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage(imgUrl)),
+                  image: DecorationImage(image: NetworkImage(imgUrl)),
                   borderRadius: BorderRadius.circular(10)),
             ),
           ),

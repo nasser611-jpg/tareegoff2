@@ -1,14 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tareegoff22/core/styles.dart';
+import '../screens/user_complaines_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tareegoff22/presentation/screens/login.dart';
 import 'package:tareegoff22/presentation/screens/sign_up.dart';
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ignore: must_be_immutable
-class SocialNetworkWidget extends StatelessWidget {
+class SocialNetworkWidget extends StatefulWidget {
   SocialNetworkWidget({Key? key}) : super(key: key);
+
+  @override
+  State<SocialNetworkWidget> createState() => _SocialNetworkWidgetState();
+}
+
+class _SocialNetworkWidgetState extends State<SocialNetworkWidget> {
   TextEditingController emailController = TextEditingController();
+
   TextEditingController passController = TextEditingController();
+
+      Future signInWithGoogle() async {
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+if(googleUser==null){
+  return ;
+}
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth.accessToken,
+    idToken: googleAuth.idToken,
+  );
+
+
+   await FirebaseAuth.instance.signInWithCredential(credential);
+   Navigator.push(context, MaterialPageRoute(builder: (context) => const UserComplainesScreen(),));
+}
+@override
+  void dispose() {
+  emailController.dispose();
+  passController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,13 +96,16 @@ class SocialNetworkWidget extends StatelessWidget {
                 const SizedBox(
                   width: 22,
                 ),
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: const Color(0xffD8D8D8),
-                  child: SvgPicture.asset(
-                    'assets/images/google.svg',
-                    width: 25,
-                    height: MediaQuery.of(context).size.height * 0.030,
+                GestureDetector(
+                  onTap: signInWithGoogle,
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: const Color(0xffD8D8D8),
+                    child: SvgPicture.asset(
+                      'assets/images/google.svg',
+                      width: 25,
+                      height: MediaQuery.of(context).size.height * 0.030,
+                    ),
                   ),
                 ),
                 const SizedBox(

@@ -26,6 +26,18 @@ import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 class UserSendComplainesScreen extends StatefulWidget {
   const UserSendComplainesScreen({Key? key,}) : super(key: key);
 
@@ -76,6 +88,20 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
       },
     );
   }
+
+     CollectionReference user= FirebaseFirestore.instance.collection('categories');
+
+  addCategory()async{
+try{
+DocumentReference response=await  user.add({
+   'email':FirebaseAuth.instance.currentUser!.email,
+  'id':FirebaseAuth.instance.currentUser!.uid,
+  'displayName':FirebaseAuth.instance.currentUser!.displayName??'غير محدد'
+});
+
+}catch(e){
+  print('Erorr $e');
+}}
 
   Future<void> _imgFromCamera() async {
     final XFile? image = await _picker.pickImage(
@@ -373,7 +399,9 @@ setState(() {
                     ).show();
                 } else if (_formKey.currentState!.validate()) {
   try{
-        CollectionReference collNote= FirebaseFirestore.instance.collection('categories').doc(FirebaseAuth.instance.currentUser!.uid).collection('note');
+   addCategory();
+        CollectionReference collNote= FirebaseFirestore.instance.collection('categories')
+        .doc(FirebaseAuth.instance.currentUser!.uid).collection('note');
 
 DocumentReference response=await  collNote.add({
  'des':_desController.text,
@@ -384,6 +412,7 @@ DocumentReference response=await  collNote.add({
    'time':formattedDateTime,
    'state':'قيد المراجعه'
 });
+
  AwesomeDialog(
                       context: context,
                       dialogType: DialogType.success,
