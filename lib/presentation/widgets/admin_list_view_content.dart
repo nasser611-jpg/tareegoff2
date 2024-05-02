@@ -132,7 +132,7 @@ class _CustomListViewContentState extends State<CustomListViewContent> {
                      
                             } catch (e) {}
 
-                            setState(() {}); // Refresh the UI
+                            setState(() {});
                           },
                           itemBuilder: (BuildContext context) {
                             return [

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tareegoff22/core/styles.dart';
-import '../screens/user_complaines_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:tareegoff22/presentation/screens/login.dart';
 import 'package:tareegoff22/presentation/screens/sign_up.dart';
 
@@ -43,25 +41,6 @@ class _SocialNetworkWidgetState extends State<SocialNetworkWidget> {
 
   TextEditingController passController = TextEditingController();
 
-      Future signInWithGoogle() async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-if(googleUser==null){
-  return ;
-}
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth.accessToken,
-    idToken: googleAuth.idToken,
-  );
-
-
-   await FirebaseAuth.instance.signInWithCredential(credential);
-   Navigator.push(context, MaterialPageRoute(builder: (context) => const UserComplainesScreen(),));
-}
 @override
   void dispose() {
   emailController.dispose();
@@ -97,7 +76,21 @@ if(googleUser==null){
                   width: 22,
                 ),
                 GestureDetector(
-                  onTap: signInWithGoogle,
+                  onTap: () {
+                     AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.rightSlide,
+                      headerAnimationLoop: true,
+                      title: 'عفواً',
+                      desc:
+                          '  انتقل  الى صفحة تسجيل الدخول لاستخدام هذه الخاصيه',btnOkOnPress: () {
+                           
+                          },
+                          btnOkText: 'حسناً'
+                   
+                    ).show();
+                  },
                   child: CircleAvatar(
                     radius: 40,
                     backgroundColor: const Color(0xffD8D8D8),
@@ -111,12 +104,7 @@ if(googleUser==null){
                 const SizedBox(
                   width: 22,
                 ),
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: const Color(0xffD8D8D8),
-                  child: SvgPicture.asset('assets/images/facebook.svg',
-                      width: 25, height: 30),
-                )
+              
               ],
             ),
             SizedBox(
@@ -134,7 +122,7 @@ if(googleUser==null){
               height: 59,
               width: 308,
               decoration: BoxDecoration(
-                  color: Color(0xff702FDB),
+                  color: const Color(0xff702FDB),
                   borderRadius: BorderRadius.circular(12)),
               child: Center(
                 child: TextButton(
@@ -146,7 +134,7 @@ if(googleUser==null){
                   onPressed: () {
                     Navigator.pushReplacement(context, MaterialPageRoute(
                       builder: (context) {
-                        return SignUpScreen();
+                        return const SignUpScreen();
                       },
                     ));
                   },
@@ -169,7 +157,7 @@ if(googleUser==null){
                     onPressed: () {
                       Navigator.pushReplacement(context, MaterialPageRoute(
                         builder: (context) {
-                          return LoginScreen();
+                          return const LoginScreen();
                         },
                       ));
                     },

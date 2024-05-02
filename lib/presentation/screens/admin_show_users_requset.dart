@@ -53,7 +53,7 @@ class _AdminShowUsersState extends State<AdminShowUsers> {
                 return AdminComplainesScreen(catId:data[index]['id'],);
               },));
             },
-            child: Container(height: 80,width: 250,
+            child: Container(height: 100,width: 250,
               margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -75,7 +75,14 @@ class _AdminShowUsersState extends State<AdminShowUsers> {
                        Text('   : مقدم الطلب  ',),
                       ],
                     ),
-                    Text(data[index]['email'],style: const TextStyle(fontSize: 17))
+                    Text(
+  data[index]['email'],
+  style: const TextStyle(fontSize: 17),
+  softWrap: true,
+  overflow: TextOverflow.visible,
+  maxLines: 2, 
+)
+
                   ],)
                 ],
               ),

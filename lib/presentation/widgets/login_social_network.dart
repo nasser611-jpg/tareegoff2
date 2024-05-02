@@ -1,112 +1,122 @@
-import 'package:flutter_svg/svg.dart';
-import 'package:flutter/material.dart';
-import 'package:tareegoff22/core/styles.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tareegoff22/core/styles.dart';
+import 'package:tareegoff22/presentation/screens/admin_show_users_requset.dart';
 import 'package:tareegoff22/presentation/screens/sign_up.dart';
-import 'package:tareegoff22/presentation/screens/admin_complaines.dart';
 import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
 
 class LoginSocialNetworkWidget extends StatefulWidget {
-  const LoginSocialNetworkWidget({Key? key}) : super(key: key);
+  const LoginSocialNetworkWidget({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginSocialNetworkWidgetState createState() =>
       _LoginSocialNetworkWidgetState();
 }
 
 class _LoginSocialNetworkWidgetState extends State<LoginSocialNetworkWidget> {
-    Future signInWithGoogle() async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-if(googleUser==null){
-  return ;
-}
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
+  Future signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    if (googleUser == null) {
+      return;
+    }
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser.authentication;
 
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
 
-  // Once signed in, return the UserCredential
-   await FirebaseAuth.instance.signInWithCredential(credential);
-   Navigator.push(context, MaterialPageRoute(builder: (context) => const UserComplainesScreen(),));
-}
-   
+    // Once signed in, return the UserCredential
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const UserComplainesScreen(),
+        ));
+  }
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _emailError;
   String? _passwordError;
-  bool isLoading=false;
+  bool isLoading = false;
 
-@override
+  @override
   void dispose() {
-   _emailController.dispose();
-   _passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
-void _validateAndSubmit() async {
-  String? newEmailError;
-  String? newPasswordError;
 
-  if (_emailController.text.isEmpty ||
-      !RegExp(
-        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-      ).hasMatch(_emailController.text)) {
-    newEmailError = 'Please enter a valid email';
-  }
+  void _validateAndSubmit() async {
+    String? newEmailError;
+    String? newPasswordError;
 
-  if (_passwordController.text.isEmpty || _passwordController.text.length < 8) {
-    newPasswordError = 'Password must be at least 8 characters';
-  }
-
-  if (newEmailError == null && newPasswordError == null) {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-   if(_emailController.text=='admin@gmail.com'&&_passwordController.text=='admin123'){
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AdminComplainesScreen()));
-
-   }
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text
-      );
-
-      setState(() {
-        
-        isLoading = false;
-      });
-
-      if (credential.user!.emailVerified) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const UserComplainesScreen()));
-      } else {
-        print('===================================Verify email please');
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-
-      if (e.code == 'user-not-found') {
-        print('user not found');
-      } else if (e.code == 'wrong-password') {
-        print('password not correct');
-      }
+    if (_emailController.text.isEmpty ||
+        !RegExp(
+          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+        ).hasMatch(_emailController.text)) {
+      newEmailError = 'Please enter a valid email';
     }
-  } else {
-    // Display errors if any
-    setState(() {
-      _emailError = newEmailError;
-      _passwordError = newPasswordError;
-    });
+
+    if (_passwordController.text.isEmpty ||
+        _passwordController.text.length < 8) {
+      newPasswordError = 'Password must be at least 8 characters';
+    }
+
+    if (newEmailError == null && newPasswordError == null) {
+      try {
+        setState(() {
+          isLoading = true;
+        });
+        if (_emailController.text == 'admin@gmail.com' &&
+            _passwordController.text == 'admin123') {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const AdminShowUsers()));
+        }
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: _emailController.text,
+                password: _passwordController.text);
+
+        setState(() {
+          isLoading = false;
+        });
+
+        if (credential.user!.emailVerified) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const UserComplainesScreen()));
+        } else {
+          print('===================================Verify email please');
+        }
+      } on FirebaseAuthException catch (e) {
+        isLoading = false;
+
+        if (e.code == 'user-not-found') {
+          print('user not found');
+        } else if (e.code == 'wrong-password') {
+          print('password not correct');
+        }
+      }
+    } else {
+      // Display errors if any
+      setState(() {
+        _emailError = newEmailError;
+        _passwordError = newPasswordError;
+      });
+    }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -144,12 +154,6 @@ void _validateAndSubmit() async {
                       ),
                     ),
                     const SizedBox(width: 22),
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundColor: const Color(0xffD8D8D8),
-                      child: SvgPicture.asset('assets/images/facebook.svg',
-                          width: 25, height: 30),
-                    ),
                   ],
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.040),
@@ -203,48 +207,47 @@ void _validateAndSubmit() async {
                     ),
                   ),
                 ),
-                                SizedBox(height: MediaQuery.of(context).size.height * 0.010),
-                                 GestureDetector(
-                                  onTap: () async{
-                                                try {
-  await   FirebaseAuth.instance.sendPasswordResetEmail(email: _emailController.text);
-             AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.success,
-                  animType: AnimType.topSlide,
-                  headerAnimationLoop: true,
-                  title: 'عفواً',
-                  desc:
-                      'لقد تم ارسال لينك على ايميلك انقر عليه لتغيير كلمة المرور الخاصه بك!...'   ,btnOkOnPress: () {
-                     
-                      },
-                      btnOkText: 'حسناً'
-               
-                ).show();
-} on Exception catch (e) {
-           AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.error,
-                  animType: AnimType.topSlide,
-                  headerAnimationLoop: true,
-                  title: 'عفواً',
-                  desc:
-                      '$e'   ,btnOkOnPress: () {
-                     
-                      },
-                      btnOkText: 'تمام'
-               
-                ).show();
-}
-                        
-                                                                  },
-                                   child: Padding(
-                                    padding: EdgeInsets.only(right: 28.0),
-                                    child: Align(alignment: Alignment.topRight,
-                                    child: Text( 'forget Password',style: Styles.textStyle12.copyWith(color:Color(0xff702FDB)),)),
-                                                                   ),
-                                 ),
-
+                SizedBox(height: MediaQuery.of(context).size.height * 0.010),
+                GestureDetector(
+                  onTap: () async {
+                    try {
+                      await FirebaseAuth.instance
+                          .sendPasswordResetEmail(email: _emailController.text);
+                      AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.success,
+                              animType: AnimType.topSlide,
+                              headerAnimationLoop: true,
+                              title: 'عفواً',
+                              desc:
+                                  'لقد تم ارسال لينك على ايميلك انقر عليه لتغيير كلمة المرور الخاصه بك!...',
+                              btnOkOnPress: () {},
+                              btnOkText: 'حسناً')
+                          .show();
+                    } on Exception catch (e) {
+                      AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.error,
+                              animType: AnimType.topSlide,
+                              headerAnimationLoop: true,
+                              title: 'عفواً',
+                              desc: '$e',
+                              btnOkOnPress: () {},
+                              btnOkText: 'تمام')
+                          .show();
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 28.0),
+                    child: Align(
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          'forget Password',
+                          style: Styles.textStyle12
+                              .copyWith(color: Color(0xff702FDB)),
+                        )),
+                  ),
+                ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.035),
                 Container(
                   height: 59,

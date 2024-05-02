@@ -17,77 +17,73 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
   final TextEditingController _passwordController = TextEditingController();
   String? _emailError;
   String? _passwordError;
- @override
+  @override
   void dispose() {
-   _emailController.dispose();
-   _passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
-  void _submitForm() async{
-  
-      try {
-  final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-    email: _emailController.text,
-    password: _passwordController.text,
-  );
- FirebaseAuth.instance.currentUser!.sendEmailVerification();
-      Navigator.push(context, MaterialPageRoute(builder:(context) => LoginScreen(),));
- AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.success,
-                      animType: AnimType.rightSlide,
-                      headerAnimationLoop: true,
-                      title: 'عفواً',
-                      desc:
-                          '   اذهب الى الايميل وقم بالضغط على لينك التحقق لتفعيل حسابك ثم سجل الدخول به',btnOkOnPress: () {
-                            Navigator.pop(context);
-                          },
-                          btnOkText: 'حسناً'
-                   
-                    ).show();
 
-} on FirebaseAuthException catch (e) {
-  if (e.code == 'weak-password') {
-     AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.warning,
-                      animType: AnimType.rightSlide,
-                      headerAnimationLoop: true,
-                      title: 'عذراً',
-                      desc:
-                          'كلمة المرور ضعيفه جدا',
-                   
-                    ).show();
-  } else if (e.code == 'email-already-in-use') {
-          AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.warning,
-                      animType: AnimType.rightSlide,
-                      headerAnimationLoop: true,
-                      title: 'عذراً',
-                      desc:
-                          'هذا الحساب مستخدم بالفعل ',
-                   
-                    ).show();
-    print('The account already exists for that email.');
-  }else {
-    AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.warning,
-                      animType: AnimType.rightSlide,
-                      headerAnimationLoop: true,
-                      title: 'عذراً',
-                      desc:
-                          '${e.code}',
-                   
-                    ).show();
+  void _submitForm() async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          ));
+      AwesomeDialog(
+              // ignore: use_build_context_synchronously
+              context: context,
+              dialogType: DialogType.success,
+              animType: AnimType.rightSlide,
+              headerAnimationLoop: true,
+              title: 'عفواً',
+              desc:
+                  '   اذهب الى الايميل وقم بالضغط على لينك التحقق لتفعيل حسابك ثم سجل الدخول به',
+              btnOkText: 'حسناً')
+          .show();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        AwesomeDialog(
+          // ignore: use_build_context_synchronously
+          context: context,
+          dialogType: DialogType.warning,
+          animType: AnimType.rightSlide,
+          headerAnimationLoop: true,
+          title: 'عذراً',
+          desc: 'كلمة المرور ضعيفه جدا',
+        ).show();
+      } else if (e.code == 'email-already-in-use') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.warning,
+          animType: AnimType.rightSlide,
+          headerAnimationLoop: true,
+          title: 'عذراً',
+          desc: 'هذا الحساب مستخدم بالفعل ',
+        ).show();
+        print('The account already exists for that email.');
+      } else {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.warning,
+          animType: AnimType.rightSlide,
+          headerAnimationLoop: true,
+          title: 'عذراً',
+          desc: '${e.code}',
+        ).show();
+      }
+    } catch (e) {
+      print(e);
+    }
   }
-} catch (e) {
-  print(e);
-}}
-      // Here you can handle the SignUp logic with the state values
-      
-  
+  // Here you can handle the SignUp logic with the state values
 
   @override
   Widget build(BuildContext context) {
@@ -107,14 +103,12 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               children: [
-            
-              
                 SizedBox(height: MediaQuery.of(context).size.height * 0.040),
                 Text(' SignUp with email',
                     style: Styles.textStyle12
                         .copyWith(fontSize: 15, color: Colors.black)),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.038),
-                    Container(
+                Container(
                   padding: const EdgeInsets.all(6),
                   height: 65,
                   width: 300,
@@ -122,15 +116,16 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
                     color: const Color(0xffD8D8D8),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Material(
+                  child: const Material(
                     color: Colors.transparent,
                     child: TextField(
-                  
-                      decoration: InputDecoration(suffix: Text('(Optional)',style: TextStyle(fontSize: 12),),
+                      decoration: InputDecoration(
+                        suffix: Text(
+                          '(Optional)',
+                          style: TextStyle(fontSize: 12),
+                        ),
                         hintText: 'Enter username',
-                       
-                        prefixIcon: const Icon(Icons.person_outline_outlined,
-                        
+                        prefixIcon: Icon(Icons.person_outline_outlined,
                             color: Color.fromARGB(255, 125, 123, 123)),
                         border: InputBorder.none,
                       ),
@@ -149,7 +144,7 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
                   child: Material(
                     color: Colors.transparent,
                     child: TextField(
-                      controller:_emailController ,
+                      controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'Enter Email',
                         errorText: _emailError,
@@ -177,7 +172,7 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
                       decoration: InputDecoration(
                         hintText: 'Enter Password',
                         errorText: _passwordError,
-                        prefixIcon: Icon(Icons.lock,
+                        prefixIcon: const Icon(Icons.lock,
                             color: Color.fromARGB(255, 125, 123, 123)),
                         border: InputBorder.none,
                       ),
@@ -189,7 +184,7 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
                   height: 59,
                   width: 308,
                   decoration: BoxDecoration(
-                      color: Color(0xff702FDB),
+                      color: const Color(0xff702FDB),
                       borderRadius: BorderRadius.circular(12)),
                   child: Center(
                     child: TextButton(
@@ -212,7 +207,7 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
                         onPressed: () {
                           Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (context) {
-                              return LoginScreen();
+                              return const LoginScreen();
                             },
                           ));
                         },

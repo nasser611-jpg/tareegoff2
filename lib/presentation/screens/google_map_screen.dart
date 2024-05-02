@@ -43,7 +43,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
           target: LatLng(widget.lan, widget.long),
-          zoom: 12.0,
+          zoom: 18.0,
         ),
         mapType: MapType.normal,
         markers: _markers,

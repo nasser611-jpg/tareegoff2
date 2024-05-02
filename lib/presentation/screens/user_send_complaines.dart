@@ -38,6 +38,8 @@ import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
 
 
 
+
+
 class UserSendComplainesScreen extends StatefulWidget {
   const UserSendComplainesScreen({Key? key,}) : super(key: key);
 
@@ -118,7 +120,7 @@ DocumentReference response=await  user.add({
    var refStoreage=FirebaseStorage.instance.ref('images/$imageName');
    await refStoreage.putFile(file!);
  url=await refStoreage.getDownloadURL();
-;
+
       setState(() {
         _imageFile = image;
       });
@@ -163,7 +165,6 @@ setState(() {
   @override
   void initState() {
     super.initState();
-    // Set initial text value and position cursor at the end
     _desController.selection = TextSelection.fromPosition(
       TextPosition(offset: _desController.text.length),
     );
@@ -412,8 +413,7 @@ DocumentReference response=await  collNote.add({
    'time':formattedDateTime,
    'state':'قيد المراجعه'
 });
-
- AwesomeDialog(
+AwesomeDialog(
                       context: context,
                       dialogType: DialogType.success,
                       animType: AnimType.bottomSlide,
@@ -425,8 +425,11 @@ DocumentReference response=await  collNote.add({
                           },
                           btnOkText: 'حسناً'
                    
-                    ).show();
-                          Navigator.push(context, MaterialPageRoute(builder:(context) => UserComplainesScreen(),));
+                    ).show().then((value) {
+return   Navigator.push(context, MaterialPageRoute(builder:(context) => UserComplainesScreen(),));
+                    });
+ 
+                        
 
 }catch(e){
    AwesomeDialog(
