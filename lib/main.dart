@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:tareegoff22/presentation/screens/register.dart';
 import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,7 @@ void main() async {
     storageBucket: 'tareeqoff.appspot.com',
   )
   );
+
   runApp(const MyApp());
 }
 
@@ -28,6 +30,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   void initState() {
+
 FirebaseAuth.instance
   .authStateChanges()
   .listen((User? user) {
@@ -51,7 +54,7 @@ FirebaseAuth.instance
             home: FirebaseAuth.instance.currentUser != null &&
                     FirebaseAuth.instance.currentUser!.emailVerified
                 ?  UserComplainesScreen()
-                : Regesteration());
+                :const Regesteration());
       },
     );
   }

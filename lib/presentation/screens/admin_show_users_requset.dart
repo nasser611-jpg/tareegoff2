@@ -44,7 +44,7 @@ class _AdminShowUsersState extends State<AdminShowUsers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(' المستخدمين', Icons.people_sharp),
-      body: ListView.builder(
+      body:data.isEmpty? Center(child: Text('لا يوجد طلبات حالياً ',style: Styles.textStyle12,),): ListView.builder(
         itemCount: data.length,
         itemBuilder:(context, index) {
           return GestureDetector(
@@ -53,7 +53,7 @@ class _AdminShowUsersState extends State<AdminShowUsers> {
                 return AdminComplainesScreen(catId:data[index]['id'],);
               },));
             },
-            child: Container(height: 100,width: 250,
+            child:  Container(height: 100,width: 250,
               margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -88,7 +88,7 @@ class _AdminShowUsersState extends State<AdminShowUsers> {
               ),
             ),
           );
-        },),
+        },)
     );
 
   }

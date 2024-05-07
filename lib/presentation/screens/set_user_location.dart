@@ -16,8 +16,8 @@ class _MapScreenState extends State<MapScreen> {
   double? selectedLatitude;
   double? selectedLongitude;
   String? selectedAddress;
-  LatLng initialPosition = const LatLng(15.8397295945703,
-      48.4642478931523); // Default to San Francisco as fallback
+  LatLng initialPosition = const LatLng(15.8397295945703, 48.4642478931523); // Default fallback
+  Set<Marker> markers = Set(); // Set of markers to manage multiple markers.
 
   @override
   void initState() {
@@ -27,11 +27,18 @@ class _MapScreenState extends State<MapScreen> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    if (initialPosition != const LatLng(15.8397295945703, 48.4642478931523)) {
-      // Check if initialPosition is not the fallback
-      mapController!.animateCamera(
-        CameraUpdate.newLatLngZoom(initialPosition, 12.0),
-      );
+    _updateMapLocation();
+  }
+
+  void _updateMapLocation() {
+    if (mapController != null) {
+      mapController!.animateCamera(CameraUpdate.newLatLngZoom(initialPosition, 12.0));
+      // Add marker for the current location
+      markers.add(Marker(
+        markerId: MarkerId('current_location'),
+        position: initialPosition,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue), // Blue marker
+      ));
     }
   }
 
@@ -53,49 +60,43 @@ class _MapScreenState extends State<MapScreen> {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
 
     Position position = await Geolocator.getCurrentPosition();
     setState(() {
       initialPosition = LatLng(position.latitude, position.longitude);
+      // Update markers
+      markers.add(Marker(
+        markerId: MarkerId('current_location'),
+        position: initialPosition,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue), // Blue marker
+      ));
     });
 
-    if (mapController != null) {
-      mapController!.animateCamera(
-        CameraUpdate.newLatLngZoom(initialPosition, 20),
-      );
-    }
+    _updateMapLocation();
   }
-
   void _onMapTap(LatLng location) async {
     setState(() {
       selectedLatitude = location.latitude;
       selectedLongitude = location.longitude;
     });
 
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(location.latitude, location.longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
     if (placemarks.isNotEmpty) {
       Placemark placemark = placemarks.first;
       setState(() {
-        selectedAddress =
-            '${placemark.street}, ${placemark.locality}, ${placemark.subAdministrativeArea}';
+        selectedAddress = '${placemark.street}, ${placemark.locality}, ${placemark.subAdministrativeArea}';
       });
     }
+    // Add marker for the tapped location
+    markers.add(Marker(
+      markerId: MarkerId('selected_location'),
+      position: location,
+      icon: BitmapDescriptor.defaultMarker,
+    ));
   }
 
-  Set<Circle> circles = {
-    Circle(
-      circleId: const CircleId("current_location"),
-      center: const LatLng(0, 0), // Placeholder values
-      radius: 300, // Adjust the radius according to your needs
-      fillColor: Colors.blue.withOpacity(0.5),
-      strokeColor: Colors.blue,
-      strokeWidth: 1,
-    )
-  };
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,18 +109,10 @@ class _MapScreenState extends State<MapScreen> {
               onMapCreated: _onMapCreated,
               onTap: _onMapTap,
               initialCameraPosition: CameraPosition(
-                target:
-                    initialPosition, // Use the dynamically determined position
+                target: initialPosition, // Use the dynamically determined position
                 zoom: 12.0,
               ),
-              markers: selectedLatitude == null || selectedLongitude == null
-                  ? Set<Marker>()
-                  : {
-                      Marker(
-                        markerId: const MarkerId('الموقع المحدد'),
-                        position: LatLng(selectedLatitude!, selectedLongitude!),
-                      ),
-                    },
+              markers: markers,
             ),
           ),
           Padding(
@@ -131,33 +124,14 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
           GestureDetector(
-            onTap: () {
-              if (selectedAddress == null) {
-                AwesomeDialog(
-                        context: context,
-                        dialogType: DialogType.question,
-                        animType: AnimType.rightSlide,
-                        headerAnimationLoop: true,
-                        title: 'عفواً',
-                        desc: 'الرجاء اختيار الموقع !...',
-                        btnOkOnPress: () {},
-                        btnOkText: 'حسناً')
-                    .show();
-              } else {
-                Map<String, dynamic> mapData = {
-                  'selectedLatitude': selectedLatitude,
-                  'selectedLongitude': selectedLongitude,
-                  'selectedAddress': selectedAddress
-                };
-                Navigator.pop(context, mapData);
-              }
-            },
+            onTap: _saveLocation,
             child: Container(
               height: 50,
               width: 100,
               decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 211, 209, 209),
-                  borderRadius: BorderRadius.circular(12)),
+                color: const Color.fromARGB(255, 211, 209, 209),
+                borderRadius: BorderRadius.circular(12)
+              ),
               child: Center(
                 child: Text(
                   'حفظ',
@@ -169,5 +143,27 @@ class _MapScreenState extends State<MapScreen> {
         ],
       ),
     );
+  }
+
+  void _saveLocation() {
+    if (selectedAddress == null) {
+      AwesomeDialog(
+          context: context,
+          dialogType: DialogType.question,
+          animType: AnimType.rightSlide,
+          headerAnimationLoop: true,
+          title: 'عفواً',
+          desc: 'الرجاء اختيار الموقع !...',
+          btnOkOnPress: () {},
+          btnOkText: 'حسناً'
+      ).show();
+    } else {
+      Map<String, dynamic> mapData = {
+        'selectedLatitude': selectedLatitude,
+        'selectedLongitude': selectedLongitude,
+        'selectedAddress': selectedAddress
+      };
+      Navigator.pop(context, mapData);
+    }
   }
 }

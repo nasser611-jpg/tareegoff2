@@ -7,7 +7,7 @@ import 'package:tareegoff22/presentation/widgets/custom_app_logo.dart';
 import 'package:tareegoff22/presentation/widgets/sign_social_network.dart';
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

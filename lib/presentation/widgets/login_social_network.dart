@@ -1,12 +1,12 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/material.dart';
 import 'package:tareegoff22/core/styles.dart';
-import 'package:tareegoff22/presentation/screens/admin_show_users_requset.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tareegoff22/presentation/screens/sign_up.dart';
 import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
+import 'package:tareegoff22/presentation/screens/admin_show_users_requset.dart';
 
 class LoginSocialNetworkWidget extends StatefulWidget {
   const LoginSocialNetworkWidget({super.key});
@@ -214,6 +214,7 @@ class _LoginSocialNetworkWidgetState extends State<LoginSocialNetworkWidget> {
                       await FirebaseAuth.instance
                           .sendPasswordResetEmail(email: _emailController.text);
                       AwesomeDialog(
+                              // ignore: use_build_context_synchronously
                               context: context,
                               dialogType: DialogType.success,
                               animType: AnimType.topSlide,
@@ -257,12 +258,12 @@ class _LoginSocialNetworkWidgetState extends State<LoginSocialNetworkWidget> {
                       borderRadius: BorderRadius.circular(12)),
                   child: Center(
                     child: TextButton(
+                        onPressed: _validateAndSubmit,
                         child: Text(
                           'Login ',
                           style: Styles.textStyle30Title
                               .copyWith(color: Colors.white),
-                        ),
-                        onPressed: _validateAndSubmit),
+                        )),
                   ),
                 ),
                 Row(

@@ -59,7 +59,6 @@ class _MapScreenTestState extends State<MapScreenTest> {
       });
     } catch (e) {
       print('Failed to get current location: $e');
-      // Handle if the position is not available or an error occurs
     }
   }
 

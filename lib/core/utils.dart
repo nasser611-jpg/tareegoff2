@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:tareegoff22/core/styles.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -113,5 +113,4 @@ DocumentReference response=await  user.add({
 }}
   
 String  imgUrl='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4tQgNhsEvF8Oh2oURhW15UQvorIoAEwXYdQ&s';
-
 
