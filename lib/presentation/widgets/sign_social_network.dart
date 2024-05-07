@@ -1,7 +1,7 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tareegoff22/core/styles.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:tareegoff22/presentation/screens/login.dart';
 
 class SignSocialNetworksWidget extends StatefulWidget {

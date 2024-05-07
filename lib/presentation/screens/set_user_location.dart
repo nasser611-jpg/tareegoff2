@@ -17,7 +17,7 @@ class _MapScreenState extends State<MapScreen> {
   double? selectedLongitude;
   String? selectedAddress;
   LatLng initialPosition = const LatLng(15.8397295945703, 48.4642478931523); // Default fallback
-  Set<Marker> markers = Set(); // Set of markers to manage multiple markers.
+  Set<Marker> markers =  Set(); // Set of markers to manage multiple markers.
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _MapScreenState extends State<MapScreen> {
       mapController!.animateCamera(CameraUpdate.newLatLngZoom(initialPosition, 12.0));
       // Add marker for the current location
       markers.add(Marker(
-        markerId: MarkerId('current_location'),
+        markerId:const MarkerId('current_location'),
         position: initialPosition,
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue), // Blue marker
       ));
@@ -68,7 +68,7 @@ class _MapScreenState extends State<MapScreen> {
       initialPosition = LatLng(position.latitude, position.longitude);
       // Update markers
       markers.add(Marker(
-        markerId: MarkerId('current_location'),
+        markerId:const MarkerId('current_location'),
         position: initialPosition,
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue), // Blue marker
       ));
@@ -91,7 +91,7 @@ class _MapScreenState extends State<MapScreen> {
     }
     // Add marker for the tapped location
     markers.add(Marker(
-      markerId: MarkerId('selected_location'),
+      markerId: const MarkerId('selected_location'),
       position: location,
       icon: BitmapDescriptor.defaultMarker,
     ));
@@ -118,7 +118,7 @@ class _MapScreenState extends State<MapScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              selectedAddress ?? 'انقر على الخريطه لتحديد الموقع',
+              selectedAddress ?? 'أنقر على الخريطه لتحديد الموقع',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16.0),
             ),
@@ -157,7 +157,8 @@ class _MapScreenState extends State<MapScreen> {
           btnOkOnPress: () {},
           btnOkText: 'حسناً'
       ).show();
-    } else {
+    } else
+    {
       Map<String, dynamic> mapData = {
         'selectedLatitude': selectedLatitude,
         'selectedLongitude': selectedLongitude,
