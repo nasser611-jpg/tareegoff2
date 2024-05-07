@@ -12,37 +12,10 @@ import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
 import 'package:tareegoff22/presentation/screens/set_user_location.dart';
 import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class UserSendComplainesScreen extends StatefulWidget {
-  const UserSendComplainesScreen({Key? key,}) : super(key: key);
-
+  const UserSendComplainesScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<UserSendComplainesScreen> createState() =>
@@ -56,11 +29,11 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
   bool _submitButtonPressed = false;
   final ImagePicker _picker = ImagePicker();
   XFile? _imageFile;
-   File? file;
-  String ?url;
- late  double ?selectedLatitude;
- double ?selectedLongitude;
-   String? selectedAddress;
+  File? file;
+  String? url;
+  late double? selectedLatitude;
+  double? selectedLongitude;
+  String? selectedAddress;
   void _showPickOptionsDialog() {
     showModalBottomSheet(
       context: context,
@@ -91,19 +64,21 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
     );
   }
 
-     CollectionReference user= FirebaseFirestore.instance.collection('categories');
+  CollectionReference user =
+      FirebaseFirestore.instance.collection('categories');
 
-  addCategory()async{
-try{
-DocumentReference response=await  user.add({
-   'email':FirebaseAuth.instance.currentUser!.email,
-  'id':FirebaseAuth.instance.currentUser!.uid,
-  'displayName':FirebaseAuth.instance.currentUser!.displayName??'غير محدد'
-});
-
-}catch(e){
-  print('Erorr $e');
-}}
+  addCategory() async {
+    try {
+      DocumentReference response = await user.add({
+        'email': FirebaseAuth.instance.currentUser!.email,
+        'id': FirebaseAuth.instance.currentUser!.uid,
+        'displayName':
+            FirebaseAuth.instance.currentUser!.displayName ?? 'غير محدد'
+      });
+    } catch (e) {
+      print('Erorr $e');
+    }
+  }
 
   Future<void> _imgFromCamera() async {
     final XFile? image = await _picker.pickImage(
@@ -113,18 +88,16 @@ DocumentReference response=await  user.add({
     );
 
     if (image != null) {
-        
-     
-   file=File(image.path);
-   var imageName=path.basename(image.path);
-   var refStoreage=FirebaseStorage.instance.ref('images/$imageName');
-   await refStoreage.putFile(file!);
- url=await refStoreage.getDownloadURL();
+      file = File(image.path);
+      var imageName = path.basename(image.path);
+      var refStoreage = FirebaseStorage.instance.ref('images/$imageName');
+      await refStoreage.putFile(file!);
+      url = await refStoreage.getDownloadURL();
 
       setState(() {
         _imageFile = image;
       });
-    
+
       setState(() {
         _imageFile = image;
       });
@@ -139,29 +112,26 @@ DocumentReference response=await  user.add({
     );
 
     if (image != null) {
-     
-   file=File(image.path);
-   var imageName=path.basename(image.path);
-   var refStoreage=FirebaseStorage.instance.ref('images/$imageName');
-   await refStoreage.putFile(file!);
- url=await refStoreage.getDownloadURL();
+      file = File(image.path);
+      var imageName = path.basename(image.path);
+      var refStoreage = FirebaseStorage.instance.ref('images/$imageName');
+      await refStoreage.putFile(file!);
+      url = await refStoreage.getDownloadURL();
 
-
-
-setState(() {
-  
-});
+      setState(() {});
       setState(() {
         _imageFile = image;
       });
     }
   }
-@override
+
+  @override
   void dispose() {
     _desController.dispose();
-    
+
     super.dispose();
   }
+
   @override
   void initState() {
     super.initState();
@@ -174,8 +144,7 @@ setState(() {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar('اضافة شكوى', Icons.add),
-      body: 
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -308,7 +277,10 @@ setState(() {
                                   0.5, // For example, half the screen height
                               decoration: BoxDecoration(
                                 boxShadow: [
-                                 BoxShadow(color:url!=null? Colors.green:Colors.redAccent)
+                                  BoxShadow(
+                                      color: url != null
+                                          ? Colors.green
+                                          : Colors.redAccent)
                                 ],
                                 borderRadius: BorderRadius.circular(12),
                                 image: DecorationImage(
@@ -329,42 +301,43 @@ setState(() {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.020,
                     ),
-                 Center(
-                   child: Container(
-                    padding: EdgeInsets.all(6),
-                    alignment: Alignment.center,
-                               height: selectedAddress==null?40:70,
-                               width:selectedAddress==null?  150:320,
-                               decoration: BoxDecoration(
-                                 color: Color.fromARGB(255, 193, 197, 206).withOpacity(0.5),
-                                 borderRadius: BorderRadius.circular(12)),
-                               child: Center(
-                                 child: InkWell(onTap: () async{
-                                
-                            final mapData= await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MapScreen()),
-              
-            );if(mapData!=null){
-             selectedAddress=mapData['selectedAddress'];
-               selectedLatitude=mapData['selectedLatitude'];
-             selectedLongitude=mapData['selectedLongitude'];
-               setState(() {
-                 
-               });
-            }
-                                 },
-                                   child: Text(selectedAddress==null? 
-                    'اختيار الموقع':selectedAddress.toString(),
-                    style: Styles.titlePage
-                        .copyWith(color: Colors.black,fontSize: 15),
-                                   ),
-                                 ),
-                               ),
-                             ),
-                 ),
-              
-                 
+                    Center(
+                      child: Container(
+                        padding: EdgeInsets.all(6),
+                        alignment: Alignment.center,
+                        height: selectedAddress == null ? 40 : 70,
+                        width: selectedAddress == null ? 150 : 320,
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 193, 197, 206)
+                                .withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Center(
+                          child: InkWell(
+                            onTap: () async {
+                              final mapData = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MapScreen()),
+                              );
+                              if (mapData != null) {
+                                selectedAddress = mapData['selectedAddress'];
+                                selectedLatitude = mapData['selectedLatitude'];
+                                selectedLongitude =
+                                    mapData['selectedLongitude'];
+                                setState(() {});
+                              }
+                            },
+                            child: Text(
+                              selectedAddress == null
+                                  ? 'اختيار الموقع'
+                                  : selectedAddress.toString(),
+                              style: Styles.titlePage
+                                  .copyWith(color: Colors.black, fontSize: 15),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -375,79 +348,73 @@ setState(() {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ElevatedButton(
-          onPressed: () async{
+          onPressed: () async {
             setState(() {
               _submitButtonPressed = true;
             });
-              
+
             if (_desController.text.isEmpty) {
               setState(() {
                 _errorText = 'الرجاء إدخال الوصف';
               });
-            }else if(selectedAddress==null){
-                 AwesomeDialog(
+            } else if (selectedAddress == null) {
+              AwesomeDialog(
                       context: context,
                       dialogType: DialogType.question,
                       animType: AnimType.rightSlide,
                       headerAnimationLoop: true,
                       title: 'عفواً',
-                      desc:
-                          'الرجاء اختيار الموقع !...'   ,btnOkOnPress: () {
-                         
-                          },
-                          btnOkText: 'حسناً'
-                   
-                    ).show();
-                } else if (_formKey.currentState!.validate()) {
-  try{
-   addCategory();
-        CollectionReference collNote= FirebaseFirestore.instance.collection('categories')
-        .doc(FirebaseAuth.instance.currentUser!.uid).collection('note');
+                      desc: 'الرجاء اختيار الموقع !...',
+                      btnOkOnPress: () {},
+                      btnOkText: 'حسناً')
+                  .show();
+            } else if (_formKey.currentState!.validate()) {
+              try {
+                addCategory();
+                CollectionReference collNote = FirebaseFirestore.instance
+                    .collection('categories')
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .collection('note');
 
-DocumentReference response=await  collNote.add({
- 'des':_desController.text,
-   'url':url??"none",
-   'address':selectedAddress,
-   'lat':selectedLatitude,
-   'long':selectedLongitude,
-   'time':formattedDateTime,
-   'state':'قيد المراجعه'
-});
-AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.success,
-                      animType: AnimType.bottomSlide,
-                      headerAnimationLoop: true,
-                      title: 'جميل',
-                      desc:
-                          'تم الرفع بنجاح   !...'   ,btnOkOnPress: () {
-                         
-                          },
-                          btnOkText: 'حسناً'
-                   
-                    ).show().then((value) {
-return   Navigator.push(context, MaterialPageRoute(builder:(context) => UserComplainesScreen(),));
-                    });
- 
-                        
-
-}catch(e){
-   AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.warning,
-                      animType: AnimType.bottomSlide,
-                      headerAnimationLoop: true,
-                      title: 'عفواً',
-                      desc:
-                          'الرجاء تاكد من جودة الانترنت لديك  !...'   ,btnOkOnPress: () {
-                         
-                          },
-                          btnOkText: 'حسناً'
-                   
-                    ).show();
-  print('Erorr $e');
-}
-  
+                DocumentReference response = await collNote.add({
+                  'des': _desController.text,
+                  'url': url ?? "none",
+                  'address': selectedAddress,
+                  'lat': selectedLatitude,
+                  'long': selectedLongitude,
+                  'time': formattedDateTime,
+                  'state': 'قيد المراجعه'
+                });
+                AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.success,
+                        animType: AnimType.bottomSlide,
+                        headerAnimationLoop: true,
+                        title: 'جميل',
+                        desc: 'تم الرفع بنجاح   !...',
+                        btnOkOnPress: () {},
+                        btnOkText: 'حسناً')
+                    .show()
+                    .then((value) {
+                  return Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserComplainesScreen(),
+                      ));
+                });
+              } catch (e) {
+                AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.warning,
+                        animType: AnimType.bottomSlide,
+                        headerAnimationLoop: true,
+                        title: 'عفواً',
+                        desc: 'الرجاء تاكد من جودة الانترنت لديك  !...',
+                        btnOkOnPress: () {},
+                        btnOkText: 'حسناً')
+                    .show();
+                print('Erorr $e');
+              }
             }
           },
           child: Container(
@@ -455,9 +422,8 @@ return   Navigator.push(context, MaterialPageRoute(builder:(context) => UserComp
             width: 308,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
             child: Center(
-              child: InkWell(onTap: () {
-              
-              },
+              child: InkWell(
+                onTap: () {},
                 child: Text(
                   'ارسال',
                   style: Styles.textStyle30Title

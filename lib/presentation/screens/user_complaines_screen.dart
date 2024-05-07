@@ -1,12 +1,12 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tareegoff22/core/styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tareegoff22/presentation/widgets/custom_drawer.dart';
+import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
 import 'package:tareegoff22/presentation/screens/google_map_screen.dart';
 import 'package:tareegoff22/presentation/screens/user_send_complaines.dart';
-import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
-import 'package:tareegoff22/presentation/widgets/custom_drawer.dart';
 
 class UserComplainesScreen extends StatefulWidget {
   const UserComplainesScreen({Key? key}) : super(key: key);
@@ -71,7 +71,7 @@ class _UserComplainesScreenState extends State<UserComplainesScreen> {
                           animType: AnimType.rightSlide,
                           headerAnimationLoop: true,
                           title: 'عذرا',
-                          desc: 'الرجاء التاكد من جودة الانتنرنت  لديك !...',
+                          desc: 'الرجاء التاكد من جودة الانترنت  لديك !...',
                           btnOkOnPress: () {},
                           btnOkText: 'حسناً',
                         ).show();

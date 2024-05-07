@@ -15,16 +15,16 @@ class Regesteration extends StatelessWidget {
             padding: EdgeInsets.only(top: 14.h, left: 10.w),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            color: Color(0xffD9D9D9),
+            color: const Color(0xffD9D9D9),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Welcome',
                   style: Styles.textStyle30Title,
                 ),
-                Text(
+                const Text(
                   '''Please login or sign up to continue using
 our app''',
                   style: Styles.textStyle12,
@@ -32,7 +32,7 @@ our app''',
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.020,
                 ),
-                Container(
+                SizedBox(
                   height: 200,
                   width: 300,
                   child: SvgPicture.asset(
