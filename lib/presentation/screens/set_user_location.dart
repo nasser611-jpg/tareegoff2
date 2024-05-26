@@ -7,7 +7,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
 
 class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _MapScreenState createState() => _MapScreenState();
 }
 
@@ -17,7 +20,7 @@ class _MapScreenState extends State<MapScreen> {
   double? selectedLongitude;
   String? selectedAddress;
   LatLng initialPosition = const LatLng(15.8397295945703, 48.4642478931523); // Default fallback
-  Set<Marker> markers =  Set(); // Set of markers to manage multiple markers.
+  Set<Marker> markers =  {}; // Set of markers to manage multiple markers.
 
   @override
   void initState() {

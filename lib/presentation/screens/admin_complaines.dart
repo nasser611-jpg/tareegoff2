@@ -4,7 +4,7 @@ import 'package:tareegoff22/presentation/widgets/admin_list_view_item.dart';
 import 'package:tareegoff22/presentation/widgets/admin_list_view_content.dart';
 
 class AdminComplainesScreen extends StatefulWidget {
-  const AdminComplainesScreen({Key? key,  this.catId}) : super(key: key);
+  const AdminComplainesScreen({super.key,  this.catId});
  final String? catId;
   @override
   State<AdminComplainesScreen> createState() => _AdminComplainesScreenState();

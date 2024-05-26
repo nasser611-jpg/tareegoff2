@@ -5,10 +5,10 @@ import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
 class GoogleMapsScreen extends StatefulWidget {
   final double lan, long;
 
-  GoogleMapsScreen({Key? key, required this.lan, required this.long})
-      : super(key: key);
+  const GoogleMapsScreen({super.key, required this.lan, required this.long});
 
   @override
+  // ignore: library_private_types_in_public_api
   _GoogleMapsScreenState createState() => _GoogleMapsScreenState();
 }
 

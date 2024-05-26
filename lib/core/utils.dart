@@ -1,7 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:tareegoff22/core/styles.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,6 +38,8 @@ Future<void> pickImage() async {
 }
 
 class MapSample extends StatefulWidget {
+  const MapSample({super.key});
+
   @override
   State<MapSample> createState() => MapSampleState();
 }
@@ -46,6 +47,7 @@ class MapSample extends StatefulWidget {
 class MapSampleState extends State<MapSample> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(45.521563, -122.677433);
+  // ignore: unused_field
   LatLng _lastMapPosition = const LatLng(45.521563, -122.677433);
   String _address = "";
 
@@ -73,7 +75,7 @@ class MapSampleState extends State<MapSample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Location'),
+        title: const Text('Select Location'),
       ),
       body: Column(
         children: <Widget>[
@@ -102,6 +104,7 @@ class MapSampleState extends State<MapSample> {
 
   addCategory()async{
 try{
+// ignore: unused_local_variable
 DocumentReference response=await  user.add({
    'email':FirebaseAuth.instance.currentUser!.email,
   'id':FirebaseAuth.instance.currentUser!.uid,
@@ -109,6 +112,7 @@ DocumentReference response=await  user.add({
 });
 
 }catch(e){
+  // ignore: avoid_print
   print('Erorr $e');
 }}
   

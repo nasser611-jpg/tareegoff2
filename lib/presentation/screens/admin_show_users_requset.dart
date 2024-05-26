@@ -5,7 +5,7 @@ import 'package:tareegoff22/presentation/widgets/custom_app_bar.dart';
 import 'package:tareegoff22/presentation/screens/admin_complaines.dart';
 
 class AdminShowUsers extends StatefulWidget {
-  const AdminShowUsers({Key? key}) : super(key: key);
+  const AdminShowUsers({super.key});
 
   @override
   State<AdminShowUsers> createState() => _AdminShowUsersState();

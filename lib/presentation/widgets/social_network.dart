@@ -30,7 +30,7 @@ import 'package:tareegoff22/presentation/screens/sign_up.dart';
 
 // ignore: must_be_immutable
 class SocialNetworkWidget extends StatefulWidget {
-  SocialNetworkWidget({Key? key}) : super(key: key);
+  const SocialNetworkWidget({super.key});
 
   @override
   State<SocialNetworkWidget> createState() => _SocialNetworkWidgetState();

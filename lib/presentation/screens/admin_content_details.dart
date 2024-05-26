@@ -6,13 +6,13 @@ class AdminContentDetails extends StatelessWidget {
   final String date, imgUrl, decription;
   final double lan, long;
   const AdminContentDetails({
-    Key? key,
+    super.key,
     required this.date,
     required this.imgUrl,
     required this.decription,
     required this.lan,
     required this.long,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

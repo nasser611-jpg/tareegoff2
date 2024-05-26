@@ -3,7 +3,7 @@ import 'package:tareegoff22/core/styles.dart';
 
 // ignore: non_constant_identifier_names
 AppBar CustomAppBar(String title, IconData myIcon,{String ?type}) {
-  return AppBar(  iconTheme: IconThemeData(color: Colors.white),  // Set the AppBar icons to white
+  return AppBar(  iconTheme: const IconThemeData(color: Colors.white),  // Set the AppBar icons to white
 
     flexibleSpace: Container(
       
@@ -27,7 +27,7 @@ AppBar CustomAppBar(String title, IconData myIcon,{String ?type}) {
       height: 90,
       child: Row(
         children: [
-         type=='no'?Text('') : const CustomLogo(),
+         type=='no'?const Text('') : const CustomLogo(),
           const Spacer(),
           Text(
             title,
@@ -48,7 +48,7 @@ AppBar CustomAppBar(String title, IconData myIcon,{String ?type}) {
 }
 
 class CustomLogo extends StatelessWidget {
-  const CustomLogo({Key? key}) : super(key: key);
+  const CustomLogo({super.key});
 
   @override
   Widget build(BuildContext context) {

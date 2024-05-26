@@ -1,13 +1,14 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tareegoff22/core/styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:tareegoff22/presentation/screens/login.dart';
 
 class SignSocialNetworksWidget extends StatefulWidget {
-  const SignSocialNetworksWidget({Key? key}) : super(key: key);
+  const SignSocialNetworksWidget({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SignSocialNetworksWidgetState createState() =>
       _SignSocialNetworksWidgetState();
 }
@@ -26,6 +27,7 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
 
   void _submitForm() async {
     try {
+      // ignore: unused_local_variable
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text,
@@ -33,6 +35,7 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
       );
       FirebaseAuth.instance.currentUser!.sendEmailVerification();
       Navigator.push(
+          // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(
             builder: (context) => const LoginScreen(),
@@ -61,6 +64,7 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
         ).show();
       } else if (e.code == 'email-already-in-use') {
         AwesomeDialog(
+          // ignore: use_build_context_synchronously
           context: context,
           dialogType: DialogType.warning,
           animType: AnimType.rightSlide,
@@ -68,18 +72,21 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
           title: 'عذراً',
           desc: 'هذا الحساب مستخدم بالفعل ',
         ).show();
+        // ignore: avoid_print
         print('The account already exists for that email.');
       } else {
         AwesomeDialog(
+          // ignore: use_build_context_synchronously
           context: context,
           dialogType: DialogType.warning,
           animType: AnimType.rightSlide,
           headerAnimationLoop: true,
           title: 'عذراً',
-          desc: '${e.code}',
+          desc: e.code,
         ).show();
       }
     } catch (e) {
+      // ignore: avoid_print
       print(e);
     }
   }
@@ -188,12 +195,12 @@ class _SignSocialNetworksWidgetState extends State<SignSocialNetworksWidget> {
                       borderRadius: BorderRadius.circular(12)),
                   child: Center(
                     child: TextButton(
+                        onPressed: _submitForm,
                         child: Text(
                           'Sign up',
                           style: Styles.textStyle30Title
                               .copyWith(color: Colors.white),
-                        ),
-                        onPressed: _submitForm),
+                        )),
                   ),
                 ),
                 Row(

@@ -25,18 +25,19 @@ class _LoginSocialNetworkWidgetState extends State<LoginSocialNetworkWidget> {
       return;
     }
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
+    final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
     );
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
     Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (context) => const UserComplainesScreen(),
@@ -93,18 +94,22 @@ class _LoginSocialNetworkWidgetState extends State<LoginSocialNetworkWidget> {
 
         if (credential.user!.emailVerified) {
           Navigator.pushReplacement(
+              // ignore: use_build_context_synchronously
               context,
               MaterialPageRoute(
                   builder: (context) => const UserComplainesScreen()));
         } else {
+          // ignore: avoid_print
           print('===================================Verify email please');
         }
       } on FirebaseAuthException catch (e) {
         isLoading = false;
 
         if (e.code == 'user-not-found') {
+          // ignore: avoid_print
           print('user not found');
         } else if (e.code == 'wrong-password') {
+          // ignore: avoid_print
           print('password not correct');
         }
       }
@@ -227,6 +232,7 @@ class _LoginSocialNetworkWidgetState extends State<LoginSocialNetworkWidget> {
                           .show();
                     } on Exception catch (e) {
                       AwesomeDialog(
+                              // ignore: use_build_context_synchronously
                               context: context,
                               dialogType: DialogType.error,
                               animType: AnimType.topSlide,
@@ -239,13 +245,13 @@ class _LoginSocialNetworkWidgetState extends State<LoginSocialNetworkWidget> {
                     }
                   },
                   child: Padding(
-                    padding: EdgeInsets.only(right: 28.0),
+                    padding: const EdgeInsets.only(right: 28.0),
                     child: Align(
                         alignment: Alignment.topRight,
                         child: Text(
                           'forget Password',
                           style: Styles.textStyle12
-                              .copyWith(color: Color(0xff702FDB)),
+                              .copyWith(color: const Color(0xff702FDB)),
                         )),
                   ),
                 ),

@@ -7,7 +7,7 @@ import 'package:tareegoff22/presentation/widgets/custom_app_logo.dart';
 import 'package:tareegoff22/presentation/widgets/login_social_network.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -14,8 +14,8 @@ import 'package:tareegoff22/presentation/screens/user_complaines_screen.dart';
 
 class UserSendComplainesScreen extends StatefulWidget {
   const UserSendComplainesScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<UserSendComplainesScreen> createState() =>
@@ -23,7 +23,7 @@ class UserSendComplainesScreen extends StatefulWidget {
 }
 
 class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
-  TextEditingController _desController = TextEditingController();
+  final TextEditingController _desController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String? _errorText;
   bool _submitButtonPressed = false;
@@ -42,16 +42,16 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
           child: Wrap(
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Photo Library'),
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Photo Library'),
                 onTap: () {
                   _imgFromGallery();
                   Navigator.of(context).pop();
                 },
               ),
               ListTile(
-                leading: Icon(Icons.photo_camera),
-                title: Text('Camera'),
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
                 onTap: () {
                   _imgFromCamera();
                   Navigator.of(context).pop();
@@ -148,21 +148,21 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(15),
-              margin: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.all(20),
               alignment: Alignment.topRight,
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
+                    const Text(
                       'الوصــــــف ',
                       style: Styles.textStyle12,
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       height: MediaQuery.of(context).size.height * 0.15,
                       width: 320,
                       decoration: BoxDecoration(
@@ -178,7 +178,7 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                         textAlign: TextAlign.start,
                         textDirection: TextDirection.rtl,
                         decoration: InputDecoration(
-                          suffix: Icon(
+                          suffix: const Icon(
                             Icons.description,
                             color: Color.fromARGB(255, 147, 142, 142),
                           ),
@@ -186,7 +186,7 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                           hintText: 'الوصف',
                           hintTextDirection: TextDirection.rtl,
                           hintStyle: Styles.textStyle30Title.copyWith(
-                            color: Color.fromARGB(255, 147, 142, 142),
+                            color: const Color.fromARGB(255, 147, 142, 142),
                             fontSize: 18,
                           ),
                           errorText: _errorText,
@@ -208,18 +208,18 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                     if (_errorText != null)
                       Text(
                         _errorText!,
-                        style: TextStyle(color: Colors.red),
+                        style: const TextStyle(color: Colors.red),
                       ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.0100,
                     ),
-                    Text(
+                    const Text(
                       '  التوقيـــــت',
                       style: Styles.textStyle12,
                       textAlign: TextAlign.start,
                     ),
                     Container(
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       alignment: Alignment.center,
                       height: MediaQuery.of(context).size.height * 0.0700,
                       width: 320,
@@ -232,12 +232,12 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                       child: Text(
                         formattedDateTime,
                         style: Styles.titlePage.copyWith(
-                          color: Color.fromARGB(185, 7, 7, 7),
+                          color: const Color.fromARGB(185, 7, 7, 7),
                           fontSize: 18,
                         ),
                       ),
                     ),
-                    Text(
+                    const Text(
                       '  اختيار صوره',
                       style: Styles.textStyle12,
                       textAlign: TextAlign.start,
@@ -247,7 +247,7 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                         _showPickOptionsDialog();
                       },
                       child: Container(
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         alignment: Alignment.center,
                         height: MediaQuery.of(context).size.height * 0.0700,
                         width: 320,
@@ -257,7 +257,7 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.camera_alt_rounded,
                           size: 30,
                           color: Color.fromARGB(255, 85, 117, 170),
@@ -266,7 +266,7 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                     ),
                     Center(
                       child: _imageFile == null
-                          ? Text(
+                          ? const Text(
                               'لم يتم اختيار اي صوره',
                               style: TextStyle(
                                   color: Color.fromARGB(255, 142, 24, 16)),
@@ -293,7 +293,7 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.020,
                     ),
-                    Text(
+                    const Text(
                       '   الموقـــع',
                       style: Styles.textStyle12,
                       textAlign: TextAlign.start,
@@ -303,12 +303,12 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                     ),
                     Center(
                       child: Container(
-                        padding: EdgeInsets.all(6),
+                        padding: const EdgeInsets.all(6),
                         alignment: Alignment.center,
                         height: selectedAddress == null ? 40 : 70,
                         width: selectedAddress == null ? 150 : 320,
                         decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 193, 197, 206)
+                            color: const Color.fromARGB(255, 193, 197, 206)
                                 .withOpacity(0.5),
                             borderRadius: BorderRadius.circular(12)),
                         child: Center(
@@ -317,7 +317,7 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                               final mapData = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MapScreen()),
+                                    builder: (context) => const MapScreen()),
                               );
                               if (mapData != null) {
                                 selectedAddress = mapData['selectedAddress'];
@@ -399,7 +399,7 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                   return Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => UserComplainesScreen(),
+                        builder: (context) => const UserComplainesScreen(),
                       ));
                 });
               } catch (e) {
@@ -427,7 +427,7 @@ class _UserSendComplainesScreenState extends State<UserSendComplainesScreen> {
                 child: Text(
                   'ارسال',
                   style: Styles.textStyle30Title
-                      .copyWith(color: Color.fromARGB(255, 38, 146, 204)),
+                      .copyWith(color: const Color.fromARGB(255, 38, 146, 204)),
                 ),
               ),
             ),

@@ -5,7 +5,7 @@ import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:tareegoff22/presentation/widgets/social_network.dart';
 
 class Regesteration extends StatelessWidget {
-  const Regesteration({Key? key}) : super(key: key);
+  const Regesteration({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ our app''',
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.020,
                 ),
-                SocialNetworkWidget()
+                const SocialNetworkWidget()
               ],
             ));
       },

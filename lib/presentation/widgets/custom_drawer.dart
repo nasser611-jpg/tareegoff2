@@ -1,9 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tareegoff22/core/styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tareegoff22/presentation/screens/login.dart';
 class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -14,13 +16,13 @@ class CustomDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 216, 223, 229),
+            decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 216, 223, 229),
             ),
             child:Row(
               children: [
                 Text(FirebaseAuth.instance.currentUser!.email.toString()),
-                SizedBox(width: 5,),
+                const SizedBox(width: 5,),
                 CircleAvatar(
                   child:Image.asset('assets/images/logo 1.png',width: 50,height: 70,fit: BoxFit.fill,),
                   )
@@ -45,6 +47,7 @@ class CustomDrawer extends StatelessWidget {
       await googleSignIn.disconnect();
       
         } catch (e) {
+      // ignore: avoid_print
       print('error: $e');
         }
       }

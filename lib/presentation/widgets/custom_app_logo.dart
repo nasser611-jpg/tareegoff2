@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 class CustomAppLogo extends StatelessWidget {
-  const CustomAppLogo({Key? key}) : super(key: key);
+  const CustomAppLogo({super.key});
 
   @override
   Widget build(BuildContext context) {

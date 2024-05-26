@@ -6,10 +6,10 @@ import 'package:tareegoff22/presentation/screens/admin_content_details.dart';
 
 class CustomListViewContent extends StatefulWidget {
   final String? catId;
-  CustomListViewContent({
-    Key? key,
+  const CustomListViewContent({
+    super.key,
     this.catId,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomListViewContent> createState() => _CustomListViewContentState();
@@ -98,7 +98,7 @@ class _CustomListViewContentState extends State<CustomListViewContent> {
                     SizedBox(
                       child: Row(
                         children: [
-                          Container(
+                          SizedBox(
                             height: 30,width: 150,
                             child: Text(
                               data[index]['address'],softWrap: true,

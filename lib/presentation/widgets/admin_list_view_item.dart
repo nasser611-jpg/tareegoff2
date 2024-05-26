@@ -4,9 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tareegoff22/presentation/widgets/custom_animate_dots.dart';
 
 class CustomListViewImage extends StatefulWidget {
-  const CustomListViewImage({Key? key, this.catId}) : super(key: key);
+  const CustomListViewImage({super.key, this.catId});
   final String? catId;
   @override
+  // ignore: library_private_types_in_public_api
   _CustomListViewImageState createState() => _CustomListViewImageState();
 }
 
@@ -33,10 +34,10 @@ setState(() {
   }
   @override
   Widget build(BuildContext context) {
-    return isLoading?Center(child: CircularProgressIndicator(),): Container(
+    return isLoading?const Center(child: CircularProgressIndicator(),): Container(
       width: 370,
       height: MediaQuery.of(context).size.height * 0.250,
-      padding: EdgeInsets.only(left: 1, right: 1, top: 1, bottom: 1),
+      padding: const EdgeInsets.only(left: 1, right: 1, top: 1, bottom: 1),
       child: Stack(
         children: [
           PageView.builder(
@@ -56,7 +57,7 @@ setState(() {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                          width: 1, color: Color.fromARGB(255, 80, 160, 226)),
+                          width: 1, color: const Color.fromARGB(255, 80, 160, 226)),
                      image: DecorationImage(
                           image:data[index]['url']!=null? NetworkImage(
                             data[index]['url'],
